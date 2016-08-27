@@ -1,28 +1,92 @@
-function run() {
-    console.log('WE IN');
+console.log('running');
 
-    // Init Crafty:
-    Crafty.init();
+let entities = [];
+let state = {
+    placingAquaduct: false,
+};
+let selectedAquaduct = null;
+let img = null;
 
-    // green box
-    Crafty.e("2D, Canvas, Color, green_box")
-        .attr({x: 0, y: 0, w: 50, h: 50})
-        .color("rgb(0,255,0)");
 
-    // main gui component, put all your static gui stuff in here
-    var gui = $('#game')[0];
+function setup() {
+    createCanvas(800, 800);
+    background(0);
+    
+    let resevoir = new Resevoir({x: width/2, y: height/2})
+    entities.push(resevoir);
 
-    // one of the gui components: score text
-    var scoreText = $('#score')[0];
-    Crafty.bind("Score", function(newValue) {
-        scoreText.innerHTML = newValue;
-    });
+    img = loadImage("assets/imgres.jpg");
+}
 
-    gui.appendChild(scoreText);
-    Crafty.stage.elem.appendChild(gui);
+function draw() {
+    background(0);
+    // push();
+    // shearY(PI/4.0);
+    // image(img, 0, 0);
+    // pop();
+    for (let entity of entities) {
 
-    Crafty.bind("EnterFrame", function() {
-        Crafty.viewport.x += 1; // all entites will move but gui won't
-        Crafty.trigger("Score", Crafty.viewport.x);
-    });
+        // draw entities
+        if (entity.drawable) {
+            entity.draw();
+        }
+    }
+}
+
+function mouseClicked(e) {
+
+    let anAquaductWasPlacedThisClick = false;
+    let anEndNodeWasSetThisClick = false;
+
+    for (let entity of entities) {
+
+        // clickable entities
+        if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
+            entity.onclick(e);
+            
+            if (entity.aquaductable && !state.placingAquaduct) {
+                let aquaductNode = new AquaductNode({x: mouseX, y: mouseY});
+                state.placingAquaduct = true;
+                selectedAquaduct = new Aquaduct(
+                    entity,
+                    aquaductNode
+                );
+                entities.push(aquaductNode);
+                entities.push(selectedAquaduct);
+
+                anAquaductWasPlacedThisClick = true;
+            }
+
+            if (entity.aquaductable && state.placingAquaduct && selectedAquaduct != null && !anAquaductWasPlacedThisClick && entity != selectedAquaduct.endNode && !anEndNodeWasSetThisClick) {
+                console.log('connector !');
+                entities.splice(entities.indexOf(selectedAquaduct.endNode), 1);
+                selectedAquaduct.endNode = entity;
+
+                anEndNodeWasSetThisClick = true;
+            }
+        }
+    }
+
+    if (state.placingAquaduct && !anAquaductWasPlacedThisClick) {
+        selectedAquaduct = null;
+        state.placingAquaduct = false;
+    }
+}
+
+function mouseMoved(e) {
+    for (let entity of entities) {
+        if (state.placingAquaduct && selectedAquaduct) {
+            selectedAquaduct.setEndNodePosition({x: mouseX, y: mouseY});
+        }
+        
+        // hoverable entities
+        if (entity.hoverable) {
+            if (entity.collides({x: mouseX, y: mouseY})) {
+                entity.hovering = true;
+                entity.onhover(e);
+            } else {
+                entity.hovering = false;
+            }
+        }
+    }
 }
