@@ -26,7 +26,7 @@ function setup() {
     let unitFactory = new UnitFactory();
     let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
     
-    addEntity(resevoir);
+    addEntity(reservoir);
     addEntity(temple);
     addEntity(unitFactory);
     addEntity(barracks);
