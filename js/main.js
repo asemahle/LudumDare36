@@ -24,9 +24,9 @@ function setup() {
     backgroundImage = loadImage("./res/grass.png");
 
     let reservoir = new ReservoirNode({x: width/2, y: height/2});
-    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 32, health: 100, image: loadImage("./res/building.png")});
     let unitFactory = new UnitFactory();
-    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
+    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 32, health: 100, image: loadImage("./res/barracks.png")});
     let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
     let farm = new Farm({x: 1/2 * width, y: 3/4 * height });
     

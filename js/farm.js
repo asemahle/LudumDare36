@@ -7,7 +7,7 @@ class Farm extends BuildingNode {
     }
     
     operate(water, delta) {
-        farmEfficiency = 1.0 + farmEfficiency * water / delta * 0.3;
+        farmEfficiency = 1.0 + water / delta * 0.3;
     }
 }
 
