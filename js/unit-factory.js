@@ -8,14 +8,14 @@ class UnitFactory {
 
     update(delta) {
         if (Math.random() < this.garrisonSpawnRate * delta) {
+            console.log('Enemies spawn');
+
             let garrisonSize = chance.normal({mean: this.averageGarrisonSize, dev: this.averageGarrisonSize * 0.2});
             let angle = Math.random() * TWO_PI;
             let v = p5.Vector.fromAngle(angle);
-            console.log(angle, v);
             v.mult(sqrt(2 * sq(width)) + 10);
-            v.x += width/2;
-            v.y +=width/2;
-            console.log(angle, v);
+            v.x += width / 2;
+            v.y += height / 2;
 
             let targets = [];
             for (let entity of entities) {
@@ -23,11 +23,12 @@ class UnitFactory {
                     targets.push(entity);
                 }
             }
+            shuffle(targets);
 
             for(let i = 0; i < garrisonSize; i++) {
                 let unit = new Unit({
-                    x: v.x,
-                    y: v.y,
+                    x: v.x + (Math.random() - 0.5) * 60,
+                    y: v.y + (Math.random() - 0.5) * 60,
                     targets: targets,
                     speed: 50,
                     image: loadImage('./res/enemy_soldier.png'),

@@ -27,11 +27,15 @@ class Unit {
     draw() {
         push();
         translate(this.pos.x, this.pos.y);
+        if (this.currentTarget != null && this.currentTarget.pos.x - this.pos.x < 0) {
+            scale(-1, 1);
+        }
+        translate(-this.image.width/(2*this.numFrames), -this.image.height/2);
         image(
             this.image,
             floor(this.currentFrame) * this.image.width / this.numFrames, 0,
             this.image.width / this.numFrames, this.image.height,
-            -this.image.width / 2, -this.image.height / 2,
+            0, 0,
             this.image.width / this.numFrames, this.image.height
         );
         pop();
