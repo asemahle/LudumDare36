@@ -5,6 +5,6 @@ class Temple extends BuildingNode {
     }
     operate (water, delta) {
         this.waterDebit = water/delta;
-        rainChance = this.waterDebit/10 + 0.01;
+        rainChance = farmEfficiency * this.waterDebit/10 + 0.01;
     }
 }

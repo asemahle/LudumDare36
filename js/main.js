@@ -7,7 +7,7 @@ let rainChance = 0.1;
 let rainDuration = 10.0;
 let barracksThreshold = 20;
 let stone = 500;
-
+let farmEfficiency = 1.0;
 
 let entities = [];
 let state = {
@@ -28,12 +28,14 @@ function setup() {
     let unitFactory = new UnitFactory();
     let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
     let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
+    let farm = new Farm({x: 1/2 * width, y: 3/4 * height });
     
     addEntity(reservoir);
     addEntity(temple);
     addEntity(unitFactory);
     addEntity(barracks);
     addEntity(mine);
+    addEntity(farm);
     
     oldMillis = millis();
 }
@@ -104,7 +106,11 @@ function drawRain() {
 function drawUI() {
     push();
     fill(255, 255, 0);
+    var farmBonus = round((farmEfficiency - 1.0) * 100);
+    var rainProb = round(rainChance * 100);
     text("Stone: " + stone, 50, 50);
+    text("Farm bonus: " + farmBonus + "%", 50, 100);
+    text ("Chance of rain: " + rainProb + "%", 50, 150);
     pop();
 }
 
