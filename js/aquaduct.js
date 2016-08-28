@@ -8,6 +8,7 @@ class Aquaduct {
         this.endNode = endNode;
         addEntity(this.startNode);
         addEntity(this.endNode);
+        addEntity(this);
         startNode.addAquaduct(this);
         endNode.addAquaduct(this);
 
@@ -19,8 +20,10 @@ class Aquaduct {
     }
 
     setEndNode(node) {
+        this.endNode.removeAquaduct(this);
         removeEntity(this.endNode);
         addEntity(node);
+        node.addAquaduct(this);
         this.endNode = node;
     }
 
@@ -28,9 +31,6 @@ class Aquaduct {
         push();
         stroke('white');
         strokeWeight(5);
-
-        this.startNode.draw();
-        this.endNode.draw();
 
         line(this.startNode.pos.x, this.startNode.pos.y, this.endNode.pos.x, this.endNode.pos.y);
         pop();
@@ -47,6 +47,8 @@ class Aquaduct {
     }
     
     destroy() {
+        this.endNode.removeAquaduct(this);
+        this.startNode.removeAquaduct(this);
         removeEntity(this);
     }
 }

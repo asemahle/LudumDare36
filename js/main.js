@@ -16,9 +16,7 @@ function setup() {
     let temple = new BuildingNode({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
     addEntity(resevoir);
     addEntity(temple);
-
-    img = loadImage("assets/imgres.jpg");
-
+    
     oldMillis = millis();
 }
 
@@ -67,7 +65,6 @@ function mouseClicked(e) {
                     entity,
                     aquaductNode
                 );
-                addEntity(selectedAquaduct);
 
                 anAquaductWasPlacedThisClick = true;
             }
@@ -85,6 +82,8 @@ function mouseClicked(e) {
         selectedAquaduct = null;
         state.placingAquaduct = false;
     }
+
+    console.log(entities.length);
 }
 
 function mouseMoved(e) {
@@ -105,12 +104,26 @@ function mouseMoved(e) {
     }
 }
 
+function keyPressed(){
+    console.log('keypressed');
+    let se = entities.slice();
+    shuffle(se);
+    for (let e of se) {
+        if (e instanceof AquaductNode) {
+            e.destroy();
+            break;
+        }
+    }
+}
+
 function addEntity(o) {
-    if (!entityAlreadyAdded(o)) entities.push(o);
+    if (!entityAlreadyAdded(o)) {
+        entities.push(o);
+    }
 }
 
 function entityAlreadyAdded(o) {
-    return !entities.indexOf(o) === -1;
+    return !(entities.indexOf(o) === -1);
 }
 
 function removeEntity(o) {
