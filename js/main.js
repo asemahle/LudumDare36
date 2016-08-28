@@ -6,6 +6,8 @@ let rainTimer = 0;
 let rainChance = 0.1;
 let rainDuration = 10.0;
 let barracksThreshold = 20;
+let stone = 0;
+
 
 let entities = [];
 let state = {
@@ -25,11 +27,13 @@ function setup() {
     let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
     let unitFactory = new UnitFactory();
     let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
+    let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
     
     addEntity(reservoir);
     addEntity(temple);
     addEntity(unitFactory);
     addEntity(barracks);
+    addEntity(mine);
     
     oldMillis = millis();
 }
@@ -71,6 +75,7 @@ function draw() {
             rainTimer = rainDuration;
         }
     }
+    drawUI();
 
     oldMillis = newMillis;
 }
@@ -93,6 +98,13 @@ function drawRain() {
             rainX1 + (rainX2 - rainX1) * t1, rainY1 + (rainY2 - rainY1) * t1,
             rainX1 + (rainX2 - rainX1) * t2, rainY1 + (rainY2 - rainY1) * t2);
     }
+    pop();
+}
+
+function drawUI() {
+    push();
+    fill(255, 255, 0);
+    text("Stone: " + stone, 50, 50);
     pop();
 }
 
