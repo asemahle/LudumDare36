@@ -1,4 +1,4 @@
-class WaterParticles {
+class WaterParticle {
     constructor(settings) {
         settings = settings || {};
 

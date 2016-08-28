@@ -16,9 +16,7 @@ function setup() {
     let temple = new BuildingNode({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
     addEntity(resevoir);
     addEntity(temple);
-
-    img = loadImage("assets/imgres.jpg");
-
+    
     oldMillis = millis();
 }
 
