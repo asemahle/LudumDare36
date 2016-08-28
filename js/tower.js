@@ -1,20 +1,24 @@
-class Tower extends BuildingNode {
-	const ARROW_COST = 3;
-	let waterCollected = 0;
+const ARROW_COST = 3;
+
+class Tower extends BuildingNode {	
 	
     constructor(settings) {
-        super(settings);
+        super(settings);	
+		
+		this.waterCollected = 0;
+        this.image = loadImage("./res/tower.png");
     }
 	
 	operate(water, delta) {
-		waterCollected += water;
+		this.waterCollected += water;
 		
-		if(waterCollected > ARROW_COST) {			
+		if(this.waterCollected > ARROW_COST) {			
 			for (let entity of entities) {
-				if (entity instanceof EnemyUnit) {
-					if(Math.dist(this.x, this.y, entity.x, entity.y) > 200) {						
-						waterCollected -= ARROW_COST;
-						addEntity({x: this.x, y: this.y, image: loadImage("./res/arrow.png"), target: entity}});
+				if (entity instanceof Unit && entity.isEnemy) {
+					if(dist(this.x, this.y, entity.x, entity.y) < 200) {						
+						this.waterCollected -= ARROW_COST;
+						addEntity({x: this.x, y: this.y, target: entity});
+						console.log("enemy attacked!!!!!");
 						break;
 					}
 				}

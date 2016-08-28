@@ -22,6 +22,8 @@ class Unit {
         this.numFrames = settings.numFrames || 1;
         this.animationSpeed = settings.animationSpeed || 10;
         this.currentFrame = 0;
+		
+		this.isEnemy = settings.isEnemy || false;
     }
 
     draw() {

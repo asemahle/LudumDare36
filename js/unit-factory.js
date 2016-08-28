@@ -32,7 +32,8 @@ class UnitFactory {
                     targets: targets,
                     speed: 50,
                     image: loadImage('./res/enemy_soldier.png'),
-                    numFrames: 2
+                    numFrames: 2,
+					isEnemy: true
                 });
 
                 addEntity(unit);
