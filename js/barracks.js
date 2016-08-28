@@ -6,8 +6,6 @@ class Barracks extends BuildingNode {
     
     operate(water, delta) {
         this.waterReserve += water;
-        console.log("water to barracks: " + water);
-        console.log("waterReserve: " + this.waterReserve);
         if (this.waterReserve > barracksThreshold) {
             //generate a unit here
             console.log("generated a unit!");
