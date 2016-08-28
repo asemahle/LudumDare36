@@ -16,7 +16,7 @@ class BuildingNode extends AquaductNode {
     }
 
     update(delta) {
-        super.update();
+        super.update(delta);
         this.operate(this.water, delta);
         this.water = 0;
         if (this.health < 0) {

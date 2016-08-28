@@ -17,7 +17,8 @@ function setup() {
     backgroundImage = loadImage("./res/grass.png");
 
     let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -1000000, water: 1});
-    let temple = new BuildingNode({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    
     addEntity(resevoir);
     addEntity(temple);
     
