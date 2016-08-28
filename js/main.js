@@ -124,7 +124,7 @@ function mouseClicked(e) {
         if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
             entity.onclick(e);
             
-            if (entity.aquaductable && !state.placingAquaduct && stone > 100) {
+            if (entity.aquaductable && !state.placingAquaduct && stone >= 100) {
                 let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
                 state.placingAquaduct = true;
                 selectedAquaduct = new Aquaduct(
