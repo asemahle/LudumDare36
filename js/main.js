@@ -29,6 +29,7 @@ function setup() {
     let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 32, health: 100, image: loadImage("./res/barracks.png")});
     let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
     let farm = new Farm({x: 1/2 * width, y: 3/4 * height });
+    let carpenter = new Carpenter({x: 3/4 * width, y: 3/4 * height });
     
     addEntity(reservoir);
     addEntity(temple);
@@ -36,6 +37,7 @@ function setup() {
     addEntity(barracks);
     addEntity(mine);
     addEntity(farm);
+    addEntity(carpenter);
     
     oldMillis = millis();
 }
