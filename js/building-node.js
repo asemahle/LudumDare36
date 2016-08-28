@@ -20,7 +20,7 @@ class BuildingNode extends AquaductNode {
     update(delta) {
         super.update(delta);
         this.pastWaterValues.push(this.water / delta);
-        if (this.pastWaterValues.length < 30) {
+        if (this.pastWaterValues.length > 30) {
             this.pastWaterValues.shift();
         }
         let average = 0.0;

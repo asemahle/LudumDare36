@@ -1,10 +1,12 @@
 class Temple extends BuildingNode {
     constructor(settings) {
         super(settings);
-        this.waterReceived = 0;
+        this.waterDebit = 0;
     }
     operate (water, delta) {
-        this.waterReceived += water;
-        console.log("water received is : " + this.waterReceived);
+        this.waterDebit = water/delta;
+        rainChance = this.waterDebit/10;
+
+        console.log("water received is : " + this.waterDebit);
     }
 }
