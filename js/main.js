@@ -21,7 +21,8 @@ function setup() {
     backgroundImage = loadImage("./res/grass.png");
 
     let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -1000000, water: 1});
-    let temple = new BuildingNode({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    
     addEntity(resevoir);
     addEntity(temple);
     
@@ -41,7 +42,6 @@ function draw() {
             entity.update(delta);
         }
     }
-
     image(backgroundImage, 0, 0);
     for (let entity of entities) {
         // spew water from aquaduct ends
@@ -103,7 +103,7 @@ function mouseClicked(e) {
             entity.onclick(e);
             
             if (entity.aquaductable && !state.placingAquaduct) {
-                let aquaductNode = new AquaductNode({x: mouseX, y: mouseY});
+                let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
                 state.placingAquaduct = true;
                 selectedAquaduct = new Aquaduct(
                     entity,
@@ -116,6 +116,10 @@ function mouseClicked(e) {
             if (entity.aquaductable && state.placingAquaduct && selectedAquaduct != null && !anAquaductWasPlacedThisClick && entity != selectedAquaduct.endNode && !anEndNodeWasSetThisClick) {
                 console.log('connector !');
                 selectedAquaduct.setEndNode(entity);
+
+                if (isDuplicateAquaduct(selectedAquaduct)) {
+                    selectedAquaduct.destroy();
+                }
 
                 anEndNodeWasSetThisClick = true;
             }
@@ -175,6 +179,21 @@ function removeEntity(o) {
     if (index >= 0) {
         entities.splice(entities.indexOf(o), 1);
     }
+}
+
+function isDuplicateAquaduct(aquaduct) {
+    numDupes = 0;
+    for (let entity of entities) {
+        if (entity instanceof Aquaduct) {
+            if ((entity.endNode == aquaduct.endNode && entity.startNode == aquaduct.startNode) || (entity.startNode == aquaduct.endNode && entity.endNode == aquaduct.startNode)) {
+                numDupes++;
+                if (numDupes >= 2) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 function shuffle(array) {
