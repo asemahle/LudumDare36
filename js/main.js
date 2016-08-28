@@ -114,13 +114,16 @@ function mouseClicked(e) {
             }
 
             if (entity.aquaductable && state.placingAquaduct && selectedAquaduct != null && !anAquaductWasPlacedThisClick && entity != selectedAquaduct.endNode && !anEndNodeWasSetThisClick) {
-                console.log('connector !');
-                selectedAquaduct.setEndNode(entity);
+                if (selectedAquaduct.startNode !== entity){
+                    selectedAquaduct.setEndNode(entity);
 
-                if (isDuplicateAquaduct(selectedAquaduct)) {
-                    selectedAquaduct.destroy();
+                    if (isDuplicateAquaduct(selectedAquaduct)) {
+                        selectedAquaduct.destroy();
+                    }
+                } else {
+                    // destroy aquaduct if startNode is connected to end node
+                    selectedAquaduct.endNode.destroy();
                 }
-
                 anEndNodeWasSetThisClick = true;
             }
         }
