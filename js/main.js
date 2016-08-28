@@ -5,6 +5,7 @@ let raining = false;
 let rainTimer = 0;
 let rainChance = 0.1;
 let rainDuration = 10.0;
+let barracksThreshold = 20;
 
 let entities = [];
 let state = {
@@ -20,13 +21,15 @@ function setup() {
 
     backgroundImage = loadImage("./res/grass.png");
 
-    let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -500, water: 1});
-    let temple = new Temple({x: 1/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    let reservoir = new ReservoirNode({x: width/2, y: height/2});
+    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
     let unitFactory = new UnitFactory();
-
-    addEntity(resevoir);
+    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
+    
+    addEntity(reservoir);
     addEntity(temple);
     addEntity(unitFactory);
+    addEntity(barracks);
     
     oldMillis = millis();
 }
