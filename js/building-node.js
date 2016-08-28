@@ -6,6 +6,8 @@ class BuildingNode extends AquaductNode {
 
         this.health = settings.health || 100;
         this.image = settings.image || createImage(2 * this.radius, 2 * this.radius);
+
+        this.pastWaterValues = [];
     }
 
     draw() {
@@ -17,7 +19,16 @@ class BuildingNode extends AquaductNode {
 
     update(delta) {
         super.update(delta);
-        this.operate(this.water, delta);
+        this.pastWaterValues.push(this.water / delta);
+        if (this.pastWaterValues.length < 30) {
+            this.pastWaterValues.shift();
+        }
+        let average = 0.0;
+        for (let item of this.pastWaterValues) {
+            average += item;
+        }
+        average /= this.pastWaterValues.length;
+        this.operate(average * delta, delta);
         this.water = 0;
         if (this.health < 0) {
             this.destroy();
