@@ -8,9 +8,6 @@ class UnitFactory {
 
     update(delta) {
         if (Math.random() < this.garrisonSpawnRate * delta) {
-
-            console.log('Spawning UNITS');
-
             let garrisonSize = chance.normal({mean: this.averageGarrisonSize, dev: this.averageGarrisonSize * 0.2});
             let angle = Math.random() * TWO_PI;
             let v = p5.Vector.fromAngle(angle);
