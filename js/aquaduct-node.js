@@ -21,13 +21,9 @@ class AquaductNode {
         this.aquaducts = [];
     }
 
-    onhover(e) {
-        console.log('you have hovered over the aquaduct node');
-    }
+    onhover(e) { }
 
-    onclick(e) {
-        console.log('you clicked the aquaduct node');
-    }
+    onclick(e) { }
     
     addAquaduct(aquaduct) {
         if (this.aquaducts.indexOf(aquaduct) === -1) {
@@ -70,7 +66,7 @@ class AquaductNode {
 
     destroy() {
         removeEntity(this);
-        for (let aquaduct of this.aquaducts) {
+        for (let aquaduct of this.aquaducts.slice()) {
             aquaduct.destroy();
         }
 
