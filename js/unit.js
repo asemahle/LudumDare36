@@ -68,7 +68,7 @@ class Unit {
             }
         }
         if (this.health < 0) {
-            destroy();
+            this.destroy();
         }
     }
 
