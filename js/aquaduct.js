@@ -12,11 +12,19 @@ class Aquaduct {
         startNode.addAquaduct(this);
         endNode.addAquaduct(this);
 
-        this.flowRate = settings.flowRate || 5;
+        this.flowRate = settings.flowRate || 500;
+
+        this.length = 0;
+        this.updateLength();
+    }
+
+    updateLength() {
+        this.length = new p5.Vector(this.startNode.pos.x - this.endNode.pos.x, this.startNode.pos.y - this.endNode.pos.y).mag();
     }
 
     setEndNodePosition(point) {
         this.endNode.pos = point;
+        this.updateLength();
     }
 
     setEndNode(node) {
@@ -25,6 +33,7 @@ class Aquaduct {
         addEntity(node);
         node.addAquaduct(this);
         this.endNode = node;
+        this.updateLength();
     }
 
     draw() {
@@ -48,7 +57,7 @@ class Aquaduct {
     }
 
     update(delta) {
-        let dWater = this.flowRate * delta * (this.endNode.water - this.startNode.water);
+        let dWater = (this.flowRate * delta * (this.endNode.water - this.startNode.water))/this.length;
         this.endNode.water -= dWater;
         this.startNode.water += dWater;
     }
