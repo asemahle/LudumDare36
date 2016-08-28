@@ -14,8 +14,8 @@ class WaterParticle {
             y: settings.vy || 1
         };
 
-        this.friction = settings.friction || 0.95;
-        this.growRate = settings.growRate || 1.01;
+        this.friction = settings.friction || 0.92;
+        this.growRate = settings.growRate || 1.04;
         this.opacity = 255;
 
         this.timeStep = 0.05;

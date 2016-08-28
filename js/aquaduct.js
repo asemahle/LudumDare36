@@ -37,7 +37,6 @@ class Aquaduct {
     }
 
     spew() {
-        debugger;
         if (this.endNode.aquaducts.length === 1) {
             let dir = new p5.Vector(this.endNode.pos.x - this.startNode.pos.x, this.endNode.pos.y - this.startNode.pos.y).normalize();
             this.endNode.spew(dir);
