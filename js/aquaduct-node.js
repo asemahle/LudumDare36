@@ -17,6 +17,8 @@ class AquaductNode {
         
         this.sink = settings.sink || 0;
         this.water = settings.water || 0;
+        
+        this.aquaducts = [];
     }
 
     onhover(e) {
@@ -25,6 +27,16 @@ class AquaductNode {
 
     onclick(e) {
         console.log('you clicked the aquaduct node');
+    }
+    
+    addAquaduct(aquaduct) {
+        if (this.aquaducts.indexOf(aquaduct) === -1) {
+            this.aquaducts.push(aquaduct);
+        }
+    }
+    
+    removeAquaduct(aquaduct) {
+        this.aquaducts.splice(this.aquaducts.indexOf(aquaduct), 1);
     }
 
     collides(point) {
@@ -54,5 +66,13 @@ class AquaductNode {
         if (this.water > 1) {
             this.water = 1;
         }
+    }
+
+    destroy() {
+        removeEntity(this);
+        for (let aquaduct of this.aquaducts) {
+            aquaduct.destroy();
+        }
+
     }
 }

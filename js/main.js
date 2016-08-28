@@ -12,8 +12,8 @@ function setup() {
     createCanvas(800, 800);
     background(0);
     
-    let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -100000, water: 0});
-    entities.push(resevoir);
+    let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -1000000, water: 1});
+    addEntity(resevoir);
 
     img = loadImage("assets/imgres.jpg");
 
@@ -23,18 +23,20 @@ function setup() {
 function draw() {
     background(0);
     let newMillis = millis();
-    // push();
-    // shearY(PI/4.0);
-    // image(img, 0, 0);
-    // pop();
 
+    // update water physics
     let shuffledEntities = entities.slice();
     shuffle(shuffledEntities);
     for (let entity of shuffledEntities) {
-        entity.update((newMillis - oldMillis)/1000);
+        if (entity !== selectedAquaduct) entity.update((newMillis - oldMillis)/1000);
     }
 
+
     for (let entity of entities) {
+        // spew water from aquaduct ends
+        if (entity instanceof Aquaduct) {
+            entity.spew();
+        }
 
         // draw entities
         if (entity.drawable) {
@@ -63,16 +65,14 @@ function mouseClicked(e) {
                     entity,
                     aquaductNode
                 );
-                entities.push(aquaductNode);
-                entities.push(selectedAquaduct);
+                addEntity(selectedAquaduct);
 
                 anAquaductWasPlacedThisClick = true;
             }
 
             if (entity.aquaductable && state.placingAquaduct && selectedAquaduct != null && !anAquaductWasPlacedThisClick && entity != selectedAquaduct.endNode && !anEndNodeWasSetThisClick) {
                 console.log('connector !');
-                entities.splice(entities.indexOf(selectedAquaduct.endNode), 1);
-                selectedAquaduct.endNode = entity;
+                selectedAquaduct.setEndNode(entity);
 
                 anEndNodeWasSetThisClick = true;
             }
@@ -100,6 +100,21 @@ function mouseMoved(e) {
                 entity.hovering = false;
             }
         }
+    }
+}
+
+function addEntity(o) {
+    if (!entityAlreadyAdded(o)) entities.push(o);
+}
+
+function entityAlreadyAdded(o) {
+    return !entities.indexOf(o) === -1;
+}
+
+function removeEntity(o) {
+    let index = entities.indexOf(o);
+    if (index >= 0) {
+        entities.splice(entities.indexOf(o), 1);
     }
 }
 
