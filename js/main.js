@@ -79,6 +79,10 @@ function mouseClicked(e) {
                 console.log('connector !');
                 selectedAquaduct.setEndNode(entity);
 
+                if (isDuplicateAquaduct(selectedAquaduct)) {
+                    selectedAquaduct.destroy();
+                }
+
                 anEndNodeWasSetThisClick = true;
             }
         }
@@ -137,6 +141,21 @@ function removeEntity(o) {
     if (index >= 0) {
         entities.splice(entities.indexOf(o), 1);
     }
+}
+
+function isDuplicateAquaduct(aquaduct) {
+    numDupes = 0;
+    for (let entity of entities) {
+        if (entity instanceof Aquaduct) {
+            if ((entity.endNode == aquaduct.endNode && entity.startNode == aquaduct.startNode) || (entity.startNode == aquaduct.endNode && entity.endNode == aquaduct.startNode)) {
+                numDupes++;
+                if (numDupes >= 2) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
 }
 
 function shuffle(array) {
