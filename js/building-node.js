@@ -7,6 +7,7 @@ class BuildingNode extends AquaductNode {
         this.health = settings.health || 100;
         this.image = settings.image || createImage(2 * this.radius, 2 * this.radius);
         this.currentHealth = this.health;
+        this.average = 0.0;
 
         this.pastWaterValues = [];
     }
@@ -20,7 +21,11 @@ class BuildingNode extends AquaductNode {
         rect(-32, 0, 2 * 32, 8);
         fill("red");
         var healthBarX = this.currentHealth / this.health * 2 * 32;
-        rect(-32, 0, healthBarX, 8);
+        var maxWater = this.aquaducts.length != 0 ? this.aquaducts[0].flowRate / this.aquaducts[0].length : 0;
+        var waterBarX = this.average / maxWater * 2 * 32;
+        rect(-32, 0, healthBarX, 4);
+        fill("blue");
+        rect(-32, 4, waterBarX, 4);
         pop();
     }
 
@@ -30,12 +35,12 @@ class BuildingNode extends AquaductNode {
         if (this.pastWaterValues.length > 30) {
             this.pastWaterValues.shift();
         }
-        let average = 0.0;
+        this.average = 0.0;
         for (let item of this.pastWaterValues) {
-            average += item;
+            this.average += item;
         }
-        average /= this.pastWaterValues.length;
-        this.operate(average * delta * farmEfficiency, delta);
+        this.average /= this.pastWaterValues.length;
+        this.operate(this.average * delta * farmEfficiency, delta);
         this.water = 0;
         if (this.currentHealth < 0) {
             this.destroy();

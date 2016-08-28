@@ -55,7 +55,7 @@ class WaterParticle {
             if (entity instanceof Unit) {
 
                 if (this.radius + entity.radius > sqrt(sq(this.pos.x - entity.pos.x) + sq(this.pos.y - entity.pos.y))) {
-                    entity.health -= this.damadge * delta;
+                    entity.currentHealth -= this.damadge * delta;
                 }
 
             }
