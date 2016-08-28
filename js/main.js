@@ -157,15 +157,13 @@ function mouseMoved(e) {
 }
 
 function keyPressed(){
-    console.log('keypressed');
-    let se = entities.slice();
-    shuffle(se);
-    for (let e of se) {
-        if (e instanceof AquaductNode) {
-            e.destroy();
-            break;
+    if (keyCode == DELETE) {
+        for (let entity of entities) {
+            if (entity.constructor.name == "AquaductNode" && entity.hovering) {
+                entity.destroy();
+            }
         }
-    }
+    } 
 }
 
 function addEntity(o) {
@@ -214,6 +212,7 @@ function shuffle(array) {
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
+        
     }
 
     return array;

@@ -17,6 +17,7 @@ class AquaductNode {
         
         this.sink = settings.sink || 0;
         this.water = settings.water || 0;
+        this.maxWater = settings.maxWater || 1;
         this.shouldSpew = settings.shouldSpew || false;
         
         this.aquaducts = [];
@@ -74,8 +75,8 @@ class AquaductNode {
         if (this.water < 0) {
             this.water = 0;
         }
-        if (this.water > 1) {
-            this.water = 1;
+        if (this.water > this.maxWater) {
+            this.water = this.maxWater;
         }
     }
 

@@ -58,6 +58,14 @@ class Aquaduct {
 
     update(delta) {
         let dWater = (this.flowRate * delta * (this.endNode.water - this.startNode.water))/this.length;
+        if (dWater > 0) {
+            dWater = Math.min(this.endNode.water, dWater);
+            dWater = Math.min(this.startNode.maxWater - this.startNode.water, dWater);
+        }
+        else if (dWater < 0) {
+            dWater = Math.min(this.startNode.water, dWater);
+            dWater = Math.min(this.endNode.maxWater - this.endNode.water, dWater);
+        }
         this.endNode.water -= dWater;
         this.startNode.water += dWater;
     }
