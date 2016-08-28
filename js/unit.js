@@ -18,9 +18,9 @@ class Unit {
         this.currentAttackTime = 0;
         this.currentTarget = this.targets[0];
 
-        this.image = settings.image || createImage(2 * this.radius, 2 * this.radus);
+        this.image = settings.image || createImage(2 * this.radius, 2 * this.radius);
         this.numFrames = settings.numFrames || 1;
-        this.animationSpeed = settings.animationSpeed || 0.1;
+        this.animationSpeed = settings.animationSpeed || 10;
         this.currentFrame = 0;
     }
 
@@ -28,19 +28,21 @@ class Unit {
         push();
         translate(this.pos.x, this.pos.y);
         image(
-             this.image,
-             floor(this.currentFrame) * this.image.width / this.numFrames, 0,
-             this.image.width / this.numFrames, this.image.height,
-             -this.image.width / 2, -this.image.height / 2);
+            this.image,
+            floor(this.currentFrame) * this.image.width / this.numFrames, 0,
+            this.image.width / this.numFrames, this.image.height,
+            -this.image.width / 2, -this.image.height / 2,
+            this.image.width / this.numFrames, this.image.height
+        );
         pop();
     }
 
     update(delta) {
-        if (this.currentTarget !== null) {
+        if (this.currentTarget != null) {
             let deltaX = this.currentTarget.pos.x - this.pos.x;
             let deltaY = this.currentTarget.pos.y - this.pos.y;
             let distance = sqrt(deltaX * deltaX + deltaY * deltaY);
-            let attackRange = this.radius + this.target.radius;
+            let attackRange = this.radius + this.currentTarget.radius;
             if (distance > attackRange) {
                 this.pos.x += deltaX / distance * this.speed * delta;
                 this.pos.y += deltaY / distance * this.speed * delta;

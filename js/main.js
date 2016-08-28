@@ -5,6 +5,7 @@ let raining = false;
 let rainTimer = 0;
 let rainChance = 0.1;
 let rainDuration = 10.0;
+let barracksThreshold = 20;
 
 let entities = [];
 let state = {
@@ -20,11 +21,15 @@ function setup() {
 
     backgroundImage = loadImage("./res/grass.png");
 
-    let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -500, water: 1});
+    let reservoir = new ReservoirNode({x: width/2, y: height/2});
     let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
-
-    addEntity(resevoir);
+    let unitFactory = new UnitFactory();
+    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
+    
+    addEntity(reservoir);
     addEntity(temple);
+    addEntity(unitFactory);
+    addEntity(barracks);
     
     oldMillis = millis();
 }
@@ -97,7 +102,6 @@ function mouseClicked(e) {
     let anEndNodeWasSetThisClick = false;
 
     for (let entity of entities) {
-
         // clickable entities
         if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
             entity.onclick(e);
