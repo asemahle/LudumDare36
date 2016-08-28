@@ -1,6 +1,10 @@
 console.log('running');
 
 let backgroundImage = null;
+let raining = false;
+let rainTimer = 0;
+let rainChance = 0.1;
+let rainDuration = 10.0;
 
 let entities = [];
 let state = {
@@ -17,7 +21,8 @@ function setup() {
     backgroundImage = loadImage("./res/grass.png");
 
     let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -500, water: 1});
-    let temple = new BuildingNode({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+
     addEntity(resevoir);
     addEntity(temple);
     
@@ -27,12 +32,15 @@ function setup() {
 function draw() {
     background(0);
     let newMillis = millis();
+    let delta = (newMillis - oldMillis) / 1000;
 
     // update water physics
     let shuffledEntities = entities.slice();
     shuffle(shuffledEntities);
     for (let entity of shuffledEntities) {
-        if (entity !== selectedAquaduct) entity.update((newMillis - oldMillis)/1000);
+        if (entity !== selectedAquaduct) {
+            entity.update(delta);
+        }
     }
     image(backgroundImage, 0, 0);
     for (let entity of entities) {
@@ -45,12 +53,42 @@ function draw() {
             entity.draw();
         }
     }
-    drawRain();
+    if (raining) {
+        drawRain();
+        rainTimer -= delta;
+        if (rainTimer < 0) {
+            raining = false;
+        }
+    }
+    else {
+        if (Math.random() < rainChance * delta) {
+            raining = true;
+            rainTimer = rainDuration;
+        }
+    }
 
     oldMillis = newMillis;
 }
 
 function drawRain() {
+    push();
+    fill(0, 150, 250, 100);
+    rect(0, 0, width, height);
+    stroke(0, 150, 250, 200);
+    strokeWeight(4);
+    let i = 0;
+    for (i = 0; i < 20; ++i) {
+        let rainX1 = Math.random() * (width + 100);
+        let rainY1 = 0;
+        let rainX2 = rainX1 - 100;
+        let rainY2 = height;
+        let t1 = Math.random();
+        let t2 = t1 + 0.05 * Math.random();
+        line(
+            rainX1 + (rainX2 - rainX1) * t1, rainY1 + (rainY2 - rainY1) * t1,
+            rainX1 + (rainX2 - rainX1) * t2, rainY1 + (rainY2 - rainY1) * t2);
+    }
+    pop();
 }
 
 function mouseClicked(e) {
