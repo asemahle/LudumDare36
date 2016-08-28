@@ -6,7 +6,7 @@ let rainTimer = 0;
 let rainChance = 0.1;
 let rainDuration = 10.0;
 let barracksThreshold = 20;
-let stone = 0;
+let stone = 500;
 
 
 let entities = [];
@@ -118,7 +118,7 @@ function mouseClicked(e) {
         if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
             entity.onclick(e);
             
-            if (entity.aquaductable && !state.placingAquaduct) {
+            if (entity.aquaductable && !state.placingAquaduct && stone > 100) {
                 let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
                 state.placingAquaduct = true;
                 selectedAquaduct = new Aquaduct(
@@ -135,10 +135,12 @@ function mouseClicked(e) {
 
                     if (isDuplicateAquaduct(selectedAquaduct)) {
                         selectedAquaduct.destroy();
+                        stone += 100;
                     }
                 } else {
                     // destroy aquaduct if startNode is connected to end node
                     selectedAquaduct.endNode.destroy();
+                    stone += 100;
                 }
                 anEndNodeWasSetThisClick = true;
             }
@@ -148,9 +150,8 @@ function mouseClicked(e) {
     if (state.placingAquaduct && !anAquaductWasPlacedThisClick) {
         selectedAquaduct = null;
         state.placingAquaduct = false;
+        stone -= 100;
     }
-
-    console.log(entities.length);
 }
 
 function mouseMoved(e) {
