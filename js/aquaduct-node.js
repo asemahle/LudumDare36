@@ -17,6 +17,7 @@ class AquaductNode {
         
         this.sink = settings.sink || 0;
         this.water = settings.water || 0;
+        this.shouldSpew = settings.shouldSpew || false;
         
         this.aquaducts = [];
     }
@@ -24,6 +25,20 @@ class AquaductNode {
     onhover(e) { }
 
     onclick(e) { }
+
+    spew(dir) {
+        if (!this.shouldSpew) return;
+        if (this.water > 0.1) {
+            this.water -= 0.1;
+            let particle = new WaterParticle({
+                x: this.pos.x,
+                y: this.pos.y,
+                vx: (dir.x*1000 + (Math.random()-0.5) * 1000) * 0.3,
+                vy: (dir.y*1000 + (Math.random()-0.5) * 1000) * 0.3,
+                lifespan: 0.3});
+            addEntity(particle);
+        }
+    }
     
     addAquaduct(aquaduct) {
         if (this.aquaducts.indexOf(aquaduct) === -1) {

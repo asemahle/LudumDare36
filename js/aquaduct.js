@@ -37,7 +37,15 @@ class Aquaduct {
     }
 
     spew() {
-        // TODO - Must spew water somehow???
+        debugger;
+        if (this.endNode.aquaducts.length === 1) {
+            let dir = new p5.Vector(this.endNode.pos.x - this.startNode.pos.x, this.endNode.pos.y - this.startNode.pos.y).normalize();
+            this.endNode.spew(dir);
+        }
+        if (this.startNode.aquaducts.length === 1) {
+            let dir = new p5.Vector(this.startNode.pos.x - this.endNode.pos.x, this.startNode.pos.y - this.endNode.pos.y).normalize();
+            this.startNode.spew(dir);
+        }
     }
 
     update(delta) {

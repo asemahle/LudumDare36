@@ -30,8 +30,7 @@ function draw() {
     for (let entity of shuffledEntities) {
         if (entity !== selectedAquaduct) entity.update((newMillis - oldMillis)/1000);
     }
-
-
+    
     for (let entity of entities) {
         // spew water from aquaduct ends
         if (entity instanceof Aquaduct) {
@@ -59,7 +58,7 @@ function mouseClicked(e) {
             entity.onclick(e);
             
             if (entity.aquaductable && !state.placingAquaduct) {
-                let aquaductNode = new AquaductNode({x: mouseX, y: mouseY});
+                let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
                 state.placingAquaduct = true;
                 selectedAquaduct = new Aquaduct(
                     entity,
