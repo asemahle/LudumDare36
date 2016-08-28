@@ -20,10 +20,10 @@ function setup() {
 
     backgroundImage = loadImage("./res/grass.png");
 
-    let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -500, water: 1});
+    let reservoir = new ReservoirNode({x: width/2, y: height/2});
     let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
 
-    addEntity(resevoir);
+    addEntity(reservoir);
     addEntity(temple);
     
     oldMillis = millis();

@@ -12,7 +12,7 @@ class Aquaduct {
         startNode.addAquaduct(this);
         endNode.addAquaduct(this);
 
-        this.flowRate = settings.flowRate || 500;
+        this.flowRate = settings.flowRate || 200;
 
         this.length = 0;
         this.updateLength();
@@ -57,17 +57,12 @@ class Aquaduct {
     }
 
     update(delta) {
-        let dWater = (this.flowRate * delta * (this.endNode.water - this.startNode.water))/this.length;
-        if (dWater > 0) {
-            dWater = Math.min(this.endNode.water, dWater);
-            dWater = Math.min(this.startNode.maxWater - this.startNode.water, dWater);
+        let dWater = (this.flowRate * delta * (this.endNode.water / this.endNode.maxWater - this.startNode.water / this.startNode.maxWater))/this.length;
+        if ((dWater > 0 && this.endNode.water > 0 && this.startNode.water < this.startNode.maxWater) ||
+            (dWater < 0 && this.startNode.water > 0 && this.endNode.water < this.endNode.maxWater)) {
+            this.endNode.water -= dWater;
+            this.startNode.water += dWater;
         }
-        else if (dWater < 0) {
-            dWater = Math.min(this.startNode.water, dWater);
-            dWater = Math.min(this.endNode.maxWater - this.endNode.water, dWater);
-        }
-        this.endNode.water -= dWater;
-        this.startNode.water += dWater;
     }
     
     destroy() {

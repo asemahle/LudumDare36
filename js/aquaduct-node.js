@@ -29,13 +29,16 @@ class AquaductNode {
 
     spew(dir) {
         if (!this.shouldSpew) return;
-        if (this.water > 0.1) {
+        while (this.water > 0.1) {
             this.water -= 0.1;
+            let angle = Math.random() * 0.1 - 0.05;
+            angle += Math.atan2(dir.y, dir.x);
+            let speed = 100 * Math.random() + 300;
             let particle = new WaterParticle({
                 x: this.pos.x,
                 y: this.pos.y,
-                vx: (dir.x*1000 + (Math.random()-0.5) * 1000) * 0.3,
-                vy: (dir.y*1000 + (Math.random()-0.5) * 1000) * 0.3,
+                vx: speed * Math.cos(angle),
+                vy: speed * Math.sin(angle),
                 lifespan: 0.3});
             addEntity(particle);
         }
