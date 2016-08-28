@@ -1,5 +1,7 @@
 console.log('running');
 
+let backgroundImage = null;
+
 let entities = [];
 let state = {
     placingAquaduct: false,
@@ -11,7 +13,9 @@ let oldMillis = 0;
 function setup() {
     createCanvas(800, 800);
     background(0);
-    
+
+    backgroundImage = loadImage("./res/grass.png");
+
     let resevoir = new AquaductNode({x: width/2, y: height/2, radius: 25, sink: -1000000, water: 1});
     let temple = new BuildingNode({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
     addEntity(resevoir);
@@ -30,20 +34,23 @@ function draw() {
     for (let entity of shuffledEntities) {
         if (entity !== selectedAquaduct) entity.update((newMillis - oldMillis)/1000);
     }
-    
+    image(backgroundImage, 0, 0);
     for (let entity of entities) {
         // spew water from aquaduct ends
         if (entity instanceof Aquaduct) {
             entity.spew();
         }
-
         // draw entities
         if (entity.drawable) {
             entity.draw();
         }
     }
+    drawRain();
 
     oldMillis = newMillis;
+}
+
+function drawRain() {
 }
 
 function mouseClicked(e) {
