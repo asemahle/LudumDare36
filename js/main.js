@@ -6,8 +6,8 @@ let rainTimer = 0;
 let rainChance = 0.1;
 let rainDuration = 10.0;
 let barracksThreshold = 20;
-let stone = 0;
-
+let stone = 500;
+let farmEfficiency = 1.0;
 
 let entities = [];
 let state = {
@@ -24,16 +24,18 @@ function setup() {
     backgroundImage = loadImage("./res/grass.png");
 
     let reservoir = new ReservoirNode({x: width/2, y: height/2});
-    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 25, health: 100, image: loadImage("./res/building.png")});
+    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 32, health: 100, image: loadImage("./res/building.png")});
     let unitFactory = new UnitFactory();
-    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 25, health: 100, image: loadImage("./res/barracks.png")});
+    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 32, health: 100, image: loadImage("./res/barracks.png")});
     let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
+    let farm = new Farm({x: 1/2 * width, y: 3/4 * height });
     
     addEntity(reservoir);
     addEntity(temple);
     addEntity(unitFactory);
     addEntity(barracks);
     addEntity(mine);
+    addEntity(farm);
     
     oldMillis = millis();
 }
@@ -104,7 +106,11 @@ function drawRain() {
 function drawUI() {
     push();
     fill(255, 255, 0);
+    var farmBonus = round((farmEfficiency - 1.0) * 100);
+    var rainProb = round(rainChance * 100);
     text("Stone: " + stone, 50, 50);
+    text("Farm bonus: " + farmBonus + "%", 50, 100);
+    text ("Chance of rain: " + rainProb + "%", 50, 150);
     pop();
 }
 
@@ -118,7 +124,7 @@ function mouseClicked(e) {
         if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
             entity.onclick(e);
             
-            if (entity.aquaductable && !state.placingAquaduct) {
+            if (entity.aquaductable && !state.placingAquaduct && stone > 100) {
                 let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
                 state.placingAquaduct = true;
                 selectedAquaduct = new Aquaduct(
@@ -135,10 +141,12 @@ function mouseClicked(e) {
 
                     if (isDuplicateAquaduct(selectedAquaduct)) {
                         selectedAquaduct.destroy();
+                        stone += 100;
                     }
                 } else {
                     // destroy aquaduct if startNode is connected to end node
                     selectedAquaduct.endNode.destroy();
+                    stone += 100;
                 }
                 anEndNodeWasSetThisClick = true;
             }
@@ -148,9 +156,8 @@ function mouseClicked(e) {
     if (state.placingAquaduct && !anAquaductWasPlacedThisClick) {
         selectedAquaduct = null;
         state.placingAquaduct = false;
+        stone -= 100;
     }
-
-    console.log(entities.length);
 }
 
 function mouseMoved(e) {
