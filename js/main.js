@@ -72,8 +72,8 @@ function draw() {
 
 function drawRain() {
     push();
-    fill(0, 150, 250, 100);
-    rect(0, 0, width, height);
+    //fill(0, 150, 250, 100);
+    //rect(0, 0, width, height);
     stroke(0, 150, 250, 200);
     strokeWeight(4);
     let i = 0;
