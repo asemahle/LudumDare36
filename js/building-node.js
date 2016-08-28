@@ -1,4 +1,4 @@
-class Building extends AquaductNode {
+class BuildingNode extends AquaductNode {
     constructor(settings) {
         super(settings);
         this.water = 0;
