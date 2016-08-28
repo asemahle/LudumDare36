@@ -10,14 +10,14 @@ class BuildingNode extends AquaductNode {
 
     draw() {
         push();
-        translate(this.x, this.y);
-        image(this.image, this.image.width / 2, this.image.height / 2);
+        translate(this.pos.x, this.pos.y);
+        image(this.image, -this.image.width / 2, -this.image.height / 2);
         pop();
     }
 
     update(delta) {
         super.update();
-        operate(this.water, delta);
+        this.operate(this.water, delta);
         this.water = 0;
         if (this.health < 0) {
             this.destroy();
