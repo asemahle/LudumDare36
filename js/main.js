@@ -189,6 +189,12 @@ function mouseMoved(e) {
 function keyPressed(){
     if (keyCode == DELETE) {
         for (let entity of entities) {
+            if (entity instanceof AquaductNode && entity.hovering) {
+                for (let aquaduct of entity.aquaducts.slice()) {
+                    aquaduct.destroy();
+                    stone += 30;
+                }
+            }
             if (entity.constructor.name == "AquaductNode" && entity.hovering) {
                 entity.destroy();
             }
