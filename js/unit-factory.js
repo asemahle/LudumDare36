@@ -16,7 +16,8 @@ class UnitFactory {
         this.catapultSpawnTimer -= delta;
 
         let garrisonSize = chance.normal({mean: this.averageGarrisonSize, dev: this.averageGarrisonSize * 0.2});
-        let angle = Math.random() * TWO_PI;
+        let angle = (Math.random() - 0.5) * PI / 4;
+        angle += PI / 2 * floor(Math.random() * 4);
         let v = p5.Vector.fromAngle(angle);
         v.mult(sqrt(2 * sq(width / 2)) + 10);
         v.x += width / 2;
