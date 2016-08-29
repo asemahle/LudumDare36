@@ -19,18 +19,22 @@ class Unit {
         this.damage = settings.damage || 10;
         this.attackTime = settings.attackTime || 1;
 
-        this.maxSpeed = settings.maxSpeed || 10;
+        this.maxSpeed = settings.maxSpeed || 8;
         this.targets = settings.targets || [];
         this.canAttack = false;
         this.currentAttackTime = 0;
         this.currentTarget = this.targets[0];
 
         this.image = settings.image || createImage(2 * this.radius, 2 * this.radius);
+        this.attackImage = settings.attackImage;
         this.numFrames = settings.numFrames || 1;
+        this.numAttackFrames = settings.numAttackFrames || 1;
         this.animationSpeed = settings.animationSpeed || 10;
         this.currentFrame = 0;
+        this.currentAttackFrame = 0;
 		
 		this.isEnemy = settings.isEnemy || false;
+		this.isAttacking = false;
     }
 
     draw() {
@@ -39,14 +43,26 @@ class Unit {
         if (this.currentTarget != null && this.currentTarget.pos.x - this.pos.x < 0) {
             scale(-1, 1);
         }
-        translate(-this.image.width/(2*this.numFrames), -this.image.height/2);
-        image(
-            this.image,
-            floor(this.currentFrame) * this.image.width / this.numFrames, 0,
-            this.image.width / this.numFrames, this.image.height,
-            0, 0,
-            this.image.width / this.numFrames, this.image.height
-        );
+		
+		if(this.isAttacking) {
+			translate(-this.attackImage.width/(2*this.numAttackFrames), -this.attackImage.height/2);
+			image(
+				this.attackImage,
+				floor(this.currentAttackFrame) * this.attackImage.width / this.numAttackFrames, 0,
+				this.attackImage.width / this.numAttackFrames, this.attackImage.height,
+				0, 0,
+				this.attackImage.width / this.numAttackFrames, this.attackImage.height
+			);
+		} else {
+			translate(-this.image.width/(2*this.numFrames), -this.image.height/2);
+			image(
+				this.image,
+				floor(this.currentFrame) * this.image.width / this.numFrames, 0,
+				this.image.width / this.numFrames, this.image.height,
+				0, 0,
+				this.image.width / this.numFrames, this.image.height
+			);
+		}
         pop();
     }
 
@@ -72,6 +88,7 @@ class Unit {
             let distance = sqrt(deltaX * deltaX + deltaY * deltaY);
             let attackRange = this.radius + this.currentTarget.radius;
             if (distance > attackRange) {
+				this.isAttacking = false;
                 this.pos.x += this.velocity.x;
                 this.pos.y += this.velocity.y;
                 this.currentFrame += this.animationSpeed * delta;
@@ -90,10 +107,17 @@ class Unit {
             else {
                 this.currentAttackTime -= delta;
             }
-        }
+        } else {
+			this.isAttacking = false;
+		}
         if (this.currentHealth <= 0) {
             this.destroy();
-        }
+        }		
+		this.currentAttackFrame += this.animationSpeed * delta;
+		if (this.currentAttackFrame >= this.numAttackFrames) {
+			this.currentAttackFrame -= this.currentAttackFrame;
+		}
+		this.updateTarget();
     }
 
     destroy() {
@@ -101,12 +125,17 @@ class Unit {
     }
     
     attack() {
+		this.isAttacking = true;
         this.currentTarget.currentHealth -= this.damage;
-        if (this.currentTarget.currentHealth < 0) {
+        this.updateTarget();
+    }
+	
+	updateTarget() {
+		if (this.currentTarget != null && this.currentTarget.currentHealth < 0) {
             this.currentTarget.destroy();
             this.targets.shift();
             this.currentTarget = this.targets[0];
         }
-    }
+	}
 }
 
