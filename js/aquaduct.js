@@ -40,6 +40,7 @@ class Aquaduct {
         let angle = Math.atan2(this.endNode.pos.y - this.startNode.pos.y,
                                this.endNode.pos.x - this.startNode.pos.x);
         push();
+        noStroke();
         translate(this.startNode.pos.x, this.startNode.pos.y);
         rotate(angle);
         scale(this.length / aquaductTopImage.width, 1.0);
