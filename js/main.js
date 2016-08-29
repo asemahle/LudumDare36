@@ -12,10 +12,13 @@ let currentScreen = MENU_SCREEN;
 let endGame = false;
 let endGameTimer = 0;
 
+let waterProjectileImage = null;
 let friendlySoldierImage = null;
 let friendlySoldierAttackImage = null;
 let enemySoldierImage = null;
 let enemySoldierAttackImage = null;
+let enemyCavalryImage = null;
+let enemyCavalryAttackImage = null;
 let enemyCatapultImage = null;
 let enemyCatapultAttackImage = null;
 let aquaductTopImage = null;
@@ -48,10 +51,14 @@ function setup() {
     createCanvas(800, 800);
     background(0);
 
+    waterProjectileImage = loadImage("./res/water_projectile.png");
+
     friendlySoldierImage = loadImage("./res/soldier.png");
     friendlySoldierAttackImage = loadImage("./res/friendly-attack-animation.png");
     enemySoldierImage = loadImage("./res/enemy_soldier.png");
     enemySoldierAttackImage = loadImage("./res/attack-animation.png");
+    enemyCavalryImage = loadImage("./res/cavalry.png");
+    enemyCavalryAttackImage = loadImage("./res/cavalry_attack.png");
     enemyCatapultImage = loadImage("./res/catapult.png");
     enemyCatapultAttackImage = loadImage("./res/catapult_attack.png");
     backgroundImage = loadImage("./res/grass.png");

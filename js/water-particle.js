@@ -26,9 +26,10 @@ class WaterParticle {
 
     draw() {
         push();
-        noStroke();
-        fill(color(0, 0, 255, this.opacity));
-        ellipse(this.pos.x, this.pos.y, this.radius*2, this.radius*2);
+        translate(this.pos.x, this.pos.y);
+        scale(this.radius / 32, this.radius / 32);
+        translate(-waterProjectileImage.width / 2, -waterProjectileImage.height / 2);
+        image(waterProjectileImage, 0, 0);
         pop();
     }
 
@@ -54,7 +55,7 @@ class WaterParticle {
         for (let entity of entities) {
             if (entity instanceof Unit) {
 
-                if (this.radius + entity.radius > sqrt(sq(this.pos.x - entity.pos.x) + sq(this.pos.y - entity.pos.y))) {
+                if (sq(this.radius + entity.radius) > sq(this.pos.x - entity.pos.x) + sq(this.pos.y - entity.pos.y)) {
 //                    entity.currentHealth -= this.damadge * delta;
                     let velocity = sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
                     entity.velocity.x += this.velocity.x / velocity * 300 * delta;

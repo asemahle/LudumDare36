@@ -21,6 +21,13 @@ class ReservoirNode extends BuildingNode {
         this.drawHealthBars();
         this.drawWaterBars();
         pop();
+        push();
+        fill(0);
+        rect(50, height - 70, width - 100, 20);
+        let waterBarX = this.water / this.maxWater * (width - 100);
+        fill("blue");
+        rect(50, height - 70, waterBarX, 20);
+        pop();
     }
 
     drawWaterBars() {
@@ -28,7 +35,7 @@ class ReservoirNode extends BuildingNode {
         translate(0, this.radius * 1.5 + 4);
         fill(0);
         rect(-32, 0, 2 * 32, 4);
-        var waterBarX = this.water / this.maxWater * 2 * 32;
+        let waterBarX = this.water / this.maxWater * 2 * 32;
         fill("blue");
         rect(-32, 0, waterBarX, 4);
         pop();
