@@ -7,7 +7,7 @@ class Carpenter extends BuildingNode {
     }
     
     operate(water, delta) {
-        var healAmount = water * 20 * farmEfficiency;
+        var healAmount = water * 5 * farmEfficiency;
         for (let entity of entities) {
             if (entity instanceof BuildingNode) {
                 entity.currentHealth += healAmount;

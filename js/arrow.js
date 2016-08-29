@@ -12,7 +12,7 @@ class Arrow {
             y: settings.y || 0
         };
 				
-        this.image = loadImage("./res/tower_shot.png");
+        this.image = arrowImage;
 		this.target = settings.target;
 		
 		this.lifeTime = dist(this.pos.x, this.pos.y, this.target.pos.x, this.target.pos.y) / ARROW_SPEED;

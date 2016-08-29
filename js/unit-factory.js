@@ -1,19 +1,22 @@
 class UnitFactory {
     constructor(settings) {
         settings = settings || {};
-        this.garrisonSpawnRate = settings.garrisonSpawnRate || 0.2;
-        this.averageGarrisonSize = settings.averageGarrisonSize || 2;
-        this.garrisonGrowthRate = settings.garrisonGrowthRate || 1.01;
+        this.spawnTimer = 10;
+        this.garrisonSpawnInterval = settings.garrisonSpawnInterval || 15;
+        this.averageGarrisonSize = settings.averageGarrisonSize || 3;
     }
 
     update(delta) {
-        if (Math.random() < this.garrisonSpawnRate * delta) {
-            console.log('Enemies spawn');
+        this.spawnTimer -= delta;
+        if (this.spawnTimer < 0) {
 
+            this.spawnTimer = this.garrisonSpawnInterval;
+            this.garrisonSpawnInterval *= 0.98;
+            
             let garrisonSize = chance.normal({mean: this.averageGarrisonSize, dev: this.averageGarrisonSize * 0.2});
             let angle = Math.random() * TWO_PI;
             let v = p5.Vector.fromAngle(angle);
-            v.mult(sqrt(2 * sq(width)) + 10);
+            v.mult(sqrt(2 * sq(width / 2)) + 10);
             v.x += width / 2;
             v.y += height / 2;
 
@@ -32,11 +35,13 @@ class UnitFactory {
 
             for(let i = 0; i < garrisonSize; i++) {
                 this.spawnSoldier(
-                    v.x + (Math.random() - 0.5) * 60,
-                    v.y + (Math.random() - 0.5) * 60,
+                    v.x + (Math.random() - 0.5) * 120,
+                    v.y + (Math.random() - 0.5) * 120,
                     targets);
             }
-            this.spawnCatapult(v.x, v.y, targets);
+            if (garrisonSize < this.averageGarrisonSize) {
+              this.spawnCatapult(v.x, v.y, targets);
+            }
         };
     }
     
@@ -45,9 +50,10 @@ class UnitFactory {
             x: x,
             y: y,
             targets: targets,
-            maxSpeed: 100,
-            image: loadImage('./res/enemy_soldier.png'),
-            attackImage: loadImage('./res/attack-animation.png'),
+            maxSpeed: 60,
+            damage: 3,
+            image: enemySoldierImage,
+            attackImage: enemySoldierAttackImage,
             numFrames: 2,
             isEnemy: true,
             numAttackFrames: 4
@@ -60,16 +66,17 @@ class UnitFactory {
         let unit = new Unit({
             x: x,
             y: y,
+            damage: 10,
             targets: targets,
-            maxSpeed: 40,
-            image: loadImage('./res/catapult.png'),
-            attackImage: loadImage('./res/catapult_attack.png'),
+            maxSpeed: 30,
+            image: enemyCatapultImage,
+            attackImage: enemyCatapultAttackImage,
             numFrames: 1,
             isEnemy: true,
             numAttackFrames: 2,
             animationSpeed: 0.5,
             attackTime: 4,
-            attackRadius: 256
+            attackRadius: 96
         });
         unit.attack = function() {
             this.isAttacking = true;

@@ -16,7 +16,7 @@ class WaterParticle {
 
         this.friction = settings.friction || 0.92;
         this.growRate = settings.growRate || 1.04;
-        this.damadge = settings.damadge || 20;
+        this.damadge = settings.damadge || 2;
 
         this.opacity = 255;
 
@@ -55,7 +55,10 @@ class WaterParticle {
             if (entity instanceof Unit) {
 
                 if (this.radius + entity.radius > sqrt(sq(this.pos.x - entity.pos.x) + sq(this.pos.y - entity.pos.y))) {
-                    entity.currentHealth -= this.damadge * delta;
+//                    entity.currentHealth -= this.damadge * delta;
+                    let velocity = sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
+                    entity.velocity.x += this.velocity.x / velocity * 300 * delta;
+                    entity.velocity.y += this.velocity.y / velocity * 300 * delta;
                 }
 
             }

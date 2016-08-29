@@ -11,7 +11,7 @@ class Unit {
             y: 0
         };
         this.acceleration = settings.acceleration || 200;
-        this.friction = settings.friction || 0.5;
+        this.friction = settings.friction || 1.5;
         this.radius = settings.radius || 25;
         this.attackRadius = settings.attackRadius || 25;
 
@@ -69,29 +69,16 @@ class Unit {
 
     update(delta) {
         if (this.currentTarget != null) {
-            let accel = createVector(this.currentTarget.pos.x - this.pos.x, this.currentTarget.pos.y - this.pos.y).normalize();
-            accel.mult(this.acceleration);
-
-            this.velocity.x += accel.x * delta;
-            this.velocity.y += accel.y * delta;
-
-            this.velocity.x *= (1 - this.friction * delta);
-            this.velocity.y *= (1 - this.friction * delta);
-
-            if(sqrt(sq(this.velocity.x) + sq(this.velocity.y)) > this.maxSpeed) {
-                let newV = createVector(this.velocity.x, this.velocity.y).normalize().mult(this.maxSpeed);
-                this.velocity.x = newV.x;
-                this.velocity.y = newV.y;
-            }
-
+            let accel = createVector(0, 0);
             let deltaX = this.currentTarget.pos.x - this.pos.x;
             let deltaY = this.currentTarget.pos.y - this.pos.y;
             let distance = sqrt(deltaX * deltaX + deltaY * deltaY);
             let attackRange = this.attackRadius + this.currentTarget.radius;
+
             if (distance > attackRange) {
-				this.isAttacking = false;
-                this.pos.x += this.velocity.x * delta;
-                this.pos.y += this.velocity.y * delta;
+                accel = createVector(deltaX, deltaY).normalize();
+                accel.mult(this.acceleration);
+                this.isAttacking = false;
                 this.currentFrame += this.animationSpeed * delta;
                 if (this.currentFrame >= this.numFrames) {
                     this.currentFrame -= this.numFrames;
@@ -108,6 +95,21 @@ class Unit {
             else {
                 this.currentAttackTime -= delta;
             }
+
+            this.velocity.x += accel.x * delta;
+            this.velocity.y += accel.y * delta;
+            let frictionFactor = Math.max(0, 1 - this.friction * delta);
+            this.velocity.x *= frictionFactor;
+            this.velocity.y *= frictionFactor;
+
+            if(sqrt(sq(this.velocity.x) + sq(this.velocity.y)) > this.maxSpeed) {
+                let newV = createVector(this.velocity.x, this.velocity.y).normalize().mult(this.maxSpeed);
+                this.velocity.x = newV.x;
+                this.velocity.y = newV.y;
+            }
+
+            this.pos.x += this.velocity.x * delta;
+            this.pos.y += this.velocity.y * delta;
         } else {
 			this.isAttacking = false;
 		}

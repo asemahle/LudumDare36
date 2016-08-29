@@ -39,8 +39,9 @@ class Barracks extends BuildingNode {
             y: y,
             targets: targets,
             maxSpeed: 100,
-            image: loadImage('./res/soldier.png'),
-            attackImage: loadImage('./res/friendly-attack-animation.png'),
+            damage: 3,
+            image: friendlySoldierImage,
+            attackImage: friendlySoldierAttackImage,
             numFrames: 2,
             isEnemy: false,
             numAttackFrames: 2

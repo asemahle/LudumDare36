@@ -12,9 +12,16 @@ let currentScreen = MENU_SCREEN;
 let endGame = false;
 let endGameTimer = 0;
 
+let friendlySoldierImage = null;
+let friendlySoldierAttackImage = null;
+let enemySoldierImage = null;
+let enemySoldierAttackImage = null;
+let enemyCatapultImage = null;
+let enemyCatapultAttackImage = null;
 let aquaductTopImage = null;
 let aquaductSideImage = null;
 let catapultShotImage = null;
+let arrowImage = null;
 let rubbleImage = null;
 let backgroundImage = null;
 
@@ -41,10 +48,17 @@ function setup() {
     createCanvas(800, 800);
     background(0);
 
+    friendlySoldierImage = loadImage("./res/soldier.png");
+    friendlySoldierAttackImage = loadImage("./res/friendly-attack-animation.png");
+    enemySoldierImage = loadImage("./res/enemy_soldier.png");
+    enemySoldierAttackImage = loadImage("./res/attack-animation.png");
+    enemyCatapultImage = loadImage("./res/catapult.png");
+    enemyCatapultAttackImage = loadImage("./res/catapult_attack.png");
     backgroundImage = loadImage("./res/grass.png");
     aquaductTopImage = loadImage("./res/aquaduct_top.png");
     aquaductSideImage = loadImage("./res/aquaduct_side.png");
     catapultShotImage = loadImage("./res/catapult_shot.png");
+    arrowImage = loadImage("./res/tower_shot.png");
     rubbleImage = loadImage("./res/rubble.png");
 
     mainMenuImage = loadImage("./res/main_menu.png");
@@ -212,48 +226,64 @@ function mouseClicked(e) {
     if (currentScreen != GAME_SCREEN) {
         return;
     }
-    let anAquaductWasPlacedThisClick = false;
-    let anEndNodeWasSetThisClick = false;
+    if (mouseButton == LEFT) {
+        let anAquaductWasPlacedThisClick = false;
+        let anEndNodeWasSetThisClick = false;
 
-    for (let entity of entities) {
-        // clickable entities
-        if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
-            entity.onclick(e);
-            
-            if (entity.aquaductable && !state.placingAquaduct && stone >= 100) {
-                let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
-                state.placingAquaduct = true;
-                selectedAquaduct = new Aquaduct(
-                    entity,
-                    aquaductNode
-                );
+        for (let entity of entities) {
+            // clickable entities
+            if (entity.clickable && entity.collides({x: mouseX, y: mouseY})) {
+                entity.onclick(e);
+                
+                if (entity.aquaductable && !state.placingAquaduct && stone >= 100) {
+                    let aquaductNode = new AquaductNode({x: mouseX, y: mouseY, shouldSpew: true});
+                    state.placingAquaduct = true;
+                    selectedAquaduct = new Aquaduct(
+                        entity,
+                        aquaductNode
+                    );
 
-                anAquaductWasPlacedThisClick = true;
-            }
+                    anAquaductWasPlacedThisClick = true;
+                }
 
-            if (entity.aquaductable && state.placingAquaduct && selectedAquaduct != null && !anAquaductWasPlacedThisClick && entity != selectedAquaduct.endNode && !anEndNodeWasSetThisClick) {
-                if (selectedAquaduct.startNode !== entity){
-                    selectedAquaduct.setEndNode(entity);
+                if (entity.aquaductable && state.placingAquaduct && selectedAquaduct != null && !anAquaductWasPlacedThisClick && entity != selectedAquaduct.endNode && !anEndNodeWasSetThisClick) {
+                    if (selectedAquaduct.startNode !== entity){
+                        selectedAquaduct.setEndNode(entity);
 
-                    if (isDuplicateAquaduct(selectedAquaduct)) {
-                        selectedAquaduct.destroy();
+                        if (isDuplicateAquaduct(selectedAquaduct)) {
+                            selectedAquaduct.destroy();
+                            stone += 100;
+                        }
+                    } else {
+                        // destroy aquaduct if startNode is connected to end node
+                        selectedAquaduct.endNode.destroy();
                         stone += 100;
                     }
-                } else {
-                    // destroy aquaduct if startNode is connected to end node
-                    selectedAquaduct.endNode.destroy();
-                    stone += 100;
+                    anEndNodeWasSetThisClick = true;
                 }
-                anEndNodeWasSetThisClick = true;
+            }
+        }
+
+        if (state.placingAquaduct && !anAquaductWasPlacedThisClick) {
+            selectedAquaduct = null;
+            state.placingAquaduct = false;
+            stone -= 100;
+        }
+    }
+    else if (mouseButton == RIGHT) {
+        for (let entity of entities) {
+            if (entity instanceof AquaductNode && entity.hovering) {
+                for (let aquaduct of entity.aquaducts.slice()) {
+                    aquaduct.destroy();
+                    stone += 30;
+                }
+            }
+            if (entity.constructor.name == "AquaductNode" && entity.hovering) {
+                entity.destroy();
             }
         }
     }
-
-    if (state.placingAquaduct && !anAquaductWasPlacedThisClick) {
-        selectedAquaduct = null;
-        state.placingAquaduct = false;
-        stone -= 100;
-    }
+    return false;
 }
 
 function mouseMoved(e) {
@@ -286,19 +316,6 @@ function keyPressed(){
         initializeGame();
         currentScreen = GAME_SCREEN;
     }
-    else if (currentScreen == GAME_SCREEN && keyCode == DELETE) {
-        for (let entity of entities) {
-            if (entity instanceof AquaductNode && entity.hovering) {
-                for (let aquaduct of entity.aquaducts.slice()) {
-                    aquaduct.destroy();
-                    stone += 30;
-                }
-            }
-            if (entity.constructor.name == "AquaductNode" && entity.hovering) {
-                entity.destroy();
-            }
-        }
-    } 
 }
 
 function addEntity(o) {
