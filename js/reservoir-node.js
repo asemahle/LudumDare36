@@ -18,10 +18,23 @@ class ReservoirNode extends BuildingNode {
         translate(this.pos.x, this.pos.y);
         let img = this.images[floor(2.99 * this.water / this.maxWater)];
         image(img, -img.width / 2, -img.height / 2);
+        this.drawHealthBars();
+        this.drawWaterBars();
         pop();
     }
 
-    update(delta) {
+    drawWaterBars() {
+        push();
+        translate(0, this.radius * 1.5 + 4);
+        fill(0);
+        rect(-32, 0, 2 * 32, 4);
+        var waterBarX = this.water / this.maxWater * 2 * 32;
+        fill("blue");
+        rect(-32, 0, waterBarX, 4);
+        pop();
+    }
+
+ update(delta) {
         if (raining) {
             this.water += delta * this.regenRate;
         }
