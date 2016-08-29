@@ -27,6 +27,7 @@ class ReservoirNode extends BuildingNode {
         let waterBarX = this.water / this.maxWater * (width - 100);
         fill("blue");
         rect(50, height - 70, waterBarX, 20);
+        image(this.images[2], 25, height - 70 - 10);
         pop();
     }
 
