@@ -13,6 +13,7 @@ class Unit {
         this.acceleration = settings.acceleration || 10;
         this.friction = settings.friction || 0.92;
         this.radius = settings.radius || 25;
+        this.attackRadius = settings.attackRadius || 25;
 
         this.health = settings.health || 10;
         this.currentHealth = this.health;
@@ -86,7 +87,7 @@ class Unit {
             let deltaX = this.currentTarget.pos.x - this.pos.x;
             let deltaY = this.currentTarget.pos.y - this.pos.y;
             let distance = sqrt(deltaX * deltaX + deltaY * deltaY);
-            let attackRange = this.radius + this.currentTarget.radius;
+            let attackRange = this.attackRadius + this.currentTarget.radius;
             if (distance > attackRange) {
 				this.isAttacking = false;
                 this.pos.x += this.velocity.x;
