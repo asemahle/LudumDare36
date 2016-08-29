@@ -8,7 +8,7 @@ class UnitFactory {
 
     update(delta) {
         if (Math.random() < this.garrisonSpawnRate * delta) {
-            /*console.log('Enemies spawn');
+            console.log('Enemies spawn');
 
             let garrisonSize = chance.normal({mean: this.averageGarrisonSize, dev: this.averageGarrisonSize * 0.2});
             let angle = Math.random() * TWO_PI;
@@ -36,7 +36,7 @@ class UnitFactory {
                     v.y + (Math.random() - 0.5) * 60,
                     targets);
             }
-            this.spawnCatapult(v.x, v.y, targets);*/
+            this.spawnCatapult(v.x, v.y, targets);
         };
     }
     
