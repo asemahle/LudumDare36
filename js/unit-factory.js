@@ -1,7 +1,7 @@
 class UnitFactory {
     constructor(settings) {
         settings = settings || {};
-        this.garrisonSpawnRate = settings.garrisonSpawnRate || 0.1;
+        this.garrisonSpawnRate = settings.garrisonSpawnRate || 0.2;
         this.averageGarrisonSize = settings.averageGarrisonSize || 2;
         this.garrisonGrowthRate = settings.garrisonGrowthRate || 1.01;
     }
@@ -40,7 +40,7 @@ class UnitFactory {
             x: x,
             y: y,
             targets: targets,
-            maxSpeed: 4,
+            maxSpeed: 100,
             image: loadImage('./res/enemy_soldier.png'),
             attackImage: loadImage('./res/attack-animation.png'),
             numFrames: 2,
@@ -56,7 +56,7 @@ class UnitFactory {
             x: x,
             y: y,
             targets: targets,
-            maxSpeed: 2,
+            maxSpeed: 40,
             image: loadImage('./res/catapult.png'),
             attackImage: loadImage('./res/catapult_attack.png'),
             numFrames: 1,

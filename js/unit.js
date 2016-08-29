@@ -10,8 +10,8 @@ class Unit {
             x: 0,
             y: 0
         };
-        this.acceleration = settings.acceleration || 10;
-        this.friction = settings.friction || 0.92;
+        this.acceleration = settings.acceleration || 100;
+        this.friction = settings.friction || 0.1;
         this.radius = settings.radius || 25;
         this.attackRadius = settings.attackRadius || 25;
 
@@ -75,8 +75,8 @@ class Unit {
             this.velocity.x += accel.x * delta;
             this.velocity.y += accel.y * delta;
 
-            this.velocity.x *= this.friction;
-            this.velocity.y *= this.friction;
+            this.velocity.x *= (1 - this.friction * delta);
+            this.velocity.y *= (1 - this.friction * delta);
 
             if(sqrt(sq(this.velocity.x) + sq(this.velocity.y)) > this.maxSpeed) {
                 let newV = createVector(this.velocity.x, this.velocity.y).normalize().mult(this.maxSpeed);
@@ -90,8 +90,8 @@ class Unit {
             let attackRange = this.attackRadius + this.currentTarget.radius;
             if (distance > attackRange) {
 				this.isAttacking = false;
-                this.pos.x += this.velocity.x;
-                this.pos.y += this.velocity.y;
+                this.pos.x += this.velocity.x * delta;
+                this.pos.y += this.velocity.y * delta;
                 this.currentFrame += this.animationSpeed * delta;
                 if (this.currentFrame >= this.numFrames) {
                     this.currentFrame -= this.numFrames;
