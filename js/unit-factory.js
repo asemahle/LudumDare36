@@ -23,7 +23,7 @@ class UnitFactory {
                     targets.push(entity);
                 }
             }
-            shuffle(targets);
+            targets = shuffle(targets);
 
             for(let i = 0; i < garrisonSize; i++) {
                 this.spawnSoldier(
