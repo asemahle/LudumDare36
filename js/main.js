@@ -87,13 +87,14 @@ function initializeGame() {
     img = null;
 
     let reservoir = new ReservoirNode({x: width/2, y: height/2});
-    let amphitheatre = new Amphitheatre({x: 3/4*width, y: 1/4*height});
+    let amphitheatre = new Amphitheatre({x: 1/4*width, y: 1/4*height});
+    let tower2 = new Tower({x: 3/4*width, y: 1/4*height});
     let temple = new Temple({x: 3/4 * width, y: height/2});
     let unitFactory = new UnitFactory();
     let barracks = new Barracks({x: 1/2 * width, y: height/4});
     let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
     let farm = new Farm({x: 1/2 * width, y: 3/4 * height });
-    let tower = new Tower({x: 1/4 * width, y: 3/4 * height });
+    let tower1 = new Tower({x: 1/4 * width, y: 3/4 * height });
     let carpenter = new Carpenter({x: 3/4 * width, y: 3/4 * height });
     
     addEntity(reservoir);
@@ -103,7 +104,8 @@ function initializeGame() {
     addEntity(barracks);
     addEntity(mine);
     addEntity(farm);
-    addEntity(tower);
+    addEntity(tower1);
+    addEntity(tower2);
     addEntity(carpenter);
 }
 
