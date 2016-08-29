@@ -321,6 +321,7 @@ function rightMouseClicked(e) {
     for (let entity of entities) {
         if (entity instanceof AquaductNode && entity.hovering) {
             for (let aquaduct of entity.aquaducts.slice()) {
+                state.placingAquaduct = false;
                 aquaduct.destroy();
                 stone += 30;
             }
