@@ -34,7 +34,7 @@ class ReservoirNode extends BuildingNode {
         pop();
     }
 
- update(delta) {
+     update(delta) {
         if (raining) {
             this.water += 5 * delta * this.regenRate;
         }
@@ -44,7 +44,12 @@ class ReservoirNode extends BuildingNode {
         if (this.water > this.maxWater) {
             this.water = this.maxWater;
         }
-        //console.log("water " + this.water);
+    }
+
+    destroy() {
+        super.destroy();
+        endGame = true;
+        endGameTimer = 2;
     }
 }
 

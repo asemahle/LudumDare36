@@ -64,5 +64,11 @@ class BuildingNode extends AquaductNode {
 
     operate(water, delta) {
     }
+
+    destroy() {
+        super.destroy();
+        let rubble = new Rubble({x: this.pos.x, y: this.pos.y});
+        addEntity(rubble);
+    }
 }
 

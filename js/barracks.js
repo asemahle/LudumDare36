@@ -6,6 +6,9 @@ class Barracks extends BuildingNode {
     constructor(settings) {
         super(settings);
         this.waterReserve = 0;
+        this.image = loadImage("./res/barracks.png");
+        this.radius = 32;
+        this.health = 100;
     }
         
     operate(water, delta) {

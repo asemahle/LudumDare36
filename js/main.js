@@ -1,15 +1,33 @@
-console.log('running');
+let MENU_SCREEN = 0;
+let HELP_SCREEN = 1;
+let GAME_SCREEN = 2;
+let GAME_OVER_SCREEN = 3;
+
+let mainMenuImage = null;
+let helpImage = null;
+let gameOverImage = null;
+
+let currentScreen = MENU_SCREEN;
+
+let endGame = false;
+let endGameTimer = 0;
 
 let aquaductTopImage = null;
 let aquaductSideImage = null;
 let catapultShotImage = null;
+let rubbleImage = null;
 let backgroundImage = null;
-let raining = false;
-let rainTimer = 0;
-let rainChance = 0.1;
-let rainDuration = 10.0;
-let stone = 500;
-let farmEfficiency = 1.0;
+
+let raining = null;
+let rainTimer = null;
+let rainChance = null;
+let rainDuration = null;
+let stone = null;
+let farmEfficiency = null;
+
+let score = 0;
+
+let delta = 0;
 
 let entities = [];
 let state = {
@@ -27,17 +45,45 @@ function setup() {
     aquaductTopImage = loadImage("./res/aquaduct_top.png");
     aquaductSideImage = loadImage("./res/aquaduct_side.png");
     catapultShotImage = loadImage("./res/catapult_shot.png");
+    rubbleImage = loadImage("./res/rubble.png");
+
+    mainMenuImage = loadImage("./res/main_menu.png");
+    helpImage = loadImage("./res/help.png");
+    gameOverImage = loadImage("./res/game_over.png");
+	
+    oldMillis = millis();
+}
+
+function initializeGame() {
+
+    endGame = false;
+
+    raining = false;
+    rainTimer = 0;
+    rainChance = 0.1;
+    rainDuration = 10.0;
+    stone = 500;
+    farmEfficiency = 1.0;
+
+    score = 0;
+
+    entities = [];
+    state = { placingAquaduct: false };
+    selectedAquaduct = null;
+    img = null;
 
     let reservoir = new ReservoirNode({x: width/2, y: height/2});
-    let temple = new Temple({x: 3/4 * width, y: height/2, radius: 32, health: 100, image: loadImage("./res/building.png")});
+    let amphitheatre = new Amphitheatre({x: 3/4*width, y: 1/4*height});
+    let temple = new Temple({x: 3/4 * width, y: height/2});
     let unitFactory = new UnitFactory();
-    let barracks = new Barracks({x: 1/2 * width, y: height/4, radius: 32, health: 100, image: loadImage("./res/barracks.png")});
+    let barracks = new Barracks({x: 1/2 * width, y: height/4});
     let mine = new Mine({x: 1/4 * width, y: 1/2 * height });
     let farm = new Farm({x: 1/2 * width, y: 3/4 * height });
     let tower = new Tower({x: 1/4 * width, y: 3/4 * height });
     let carpenter = new Carpenter({x: 3/4 * width, y: 3/4 * height });
     
     addEntity(reservoir);
+    addEntity(amphitheatre);
     addEntity(temple);
     addEntity(unitFactory);
     addEntity(barracks);
@@ -45,14 +91,46 @@ function setup() {
     addEntity(farm);
     addEntity(tower);
     addEntity(carpenter);
-	
-    oldMillis = millis();
+}
+
+function finishGame() {
+    entities = [];
 }
 
 function draw() {
-    background(0);
     let newMillis = millis();
-    let delta = (newMillis - oldMillis) / 1000;
+    delta = (newMillis - oldMillis) / 1000;
+    oldMillis = newMillis;
+
+    if (currentScreen == GAME_SCREEN) {
+        drawGame();
+    }
+    else if (currentScreen == MENU_SCREEN) {
+        drawMenu();
+    }
+    else if (currentScreen == HELP_SCREEN) {
+        drawHelp();
+    }
+    else if (currentScreen == GAME_OVER_SCREEN) {
+        drawGameOver();
+    }
+}
+
+function drawMenu() {
+    image(mainMenuImage, 0, 0);
+}
+
+function drawHelp() {
+    image(helpImage, 0, 0);
+}
+
+function drawGameOver() {
+    image(gameOverImage, 0, 0);
+    text("Score was: " + floor(score), 50, 50);
+}
+
+function drawGame() {
+    background(0);
 
     // update water physics
     let shuffledEntities = entities.slice();
@@ -87,8 +165,14 @@ function draw() {
         }
     }
     drawUI();
-
-    oldMillis = newMillis;
+    score += delta;
+    if (endGame) {
+        endGameTimer -= delta;
+        if (endGameTimer < 0.0) {
+            finishGame();
+            currentScreen = GAME_OVER_SCREEN;
+        }
+    }
 }
 
 function drawRain() {
@@ -117,14 +201,17 @@ function drawUI() {
     fill(255, 255, 0);
     var farmBonus = round((farmEfficiency - 1.0) * 100);
     var rainProb = round(rainChance * 100);
-    text("Stone: " + stone, 50, 50);
-    text("Farm bonus: " + farmBonus + "%", 50, 100);
-    text ("Chance of rain: " + rainProb + "%", 50, 150);
+    text("Score: " + floor(score), 50, 50);
+    text("Stone: " + stone, 50, 100);
+    text("Farm bonus: " + farmBonus + "%", 50, 150);
+    text ("Chance of rain: " + rainProb + "%", 50, 200);
     pop();
 }
 
 function mouseClicked(e) {
-
+    if (currentScreen != GAME_SCREEN) {
+        return;
+    }
     let anAquaductWasPlacedThisClick = false;
     let anEndNodeWasSetThisClick = false;
 
@@ -188,7 +275,18 @@ function mouseMoved(e) {
 }
 
 function keyPressed(){
-    if (keyCode == DELETE) {
+    if (currentScreen == MENU_SCREEN && key == ' ') {
+        currentScreen = HELP_SCREEN;
+    }
+    else if (currentScreen == HELP_SCREEN && key == ' ') {
+        initializeGame();
+        currentScreen = GAME_SCREEN;
+    }
+    else if (currentScreen == GAME_OVER_SCREEN && key == ' ') {
+        initializeGame();
+        currentScreen = GAME_SCREEN;
+    }
+    else if (currentScreen == GAME_SCREEN && keyCode == DELETE) {
         for (let entity of entities) {
             if (entity instanceof AquaductNode && entity.hovering) {
                 for (let aquaduct of entity.aquaducts.slice()) {

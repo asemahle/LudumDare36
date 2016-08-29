@@ -2,6 +2,9 @@ class Temple extends BuildingNode {
     constructor(settings) {
         super(settings);
         this.waterDebit = 0;
+        this.image = loadImage("./res/building.png");
+        this.radius = 32;
+        this.health = 100;
     }
 	
     operate (water, delta) {
