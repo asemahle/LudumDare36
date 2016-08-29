@@ -157,21 +157,40 @@ function drawGame() {
 
     // update water physics
     let shuffledEntities = entities.slice();
-    shuffle(shuffledEntities);
+    shuffledEntities = shuffle(shuffledEntities);
     for (let entity of shuffledEntities) {
         if (entity !== selectedAquaduct) {
             entity.update(delta);
         }
     }
     image(backgroundImage, 0, 0);
+    let aquaducts = [];
+    let aquaductNodes = [];
+    let buildings = [];
+    let units = [];
+    let others = [];
     for (let entity of entities) {
-        // spew water from aquaduct ends
-        if (entity instanceof Aquaduct) {
+        if (entity instanceof Unit) {
+            units.push(entity);
+        } else if (entity instanceof BuildingNode) {
+            buildings.push(entity);
+        } else if (entity instanceof Aquaduct) {
             entity.spew();
+            aquaducts.push(entity);
+        } else if (entity instanceof AquaductNode) {
+            aquaductNodes.push(entity);
+        } else {
+            others.push(entity);
         }
-        // draw entities
-        if (entity.drawable) {
-            entity.draw();
+    }
+
+    let drawLists = [ aquaducts, aquaductNodes, buildings, units, others ];
+    for (let list of drawLists) {
+        for (let entity of list) {
+            // draw entities
+            if (entity.drawable) {
+                entity.draw();
+            }
         }
     }
     if (raining) {
