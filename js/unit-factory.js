@@ -62,7 +62,8 @@ class UnitFactory {
             numFrames: 1,
             isEnemy: true,
             numAttackFrames: 2,
-            animationSpeed: 0.2,
+            animationSpeed: 0.5,
+            attackTime: 4,
             attackRadius: 256
         });
         unit.attack = function() {
