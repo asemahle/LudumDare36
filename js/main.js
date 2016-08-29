@@ -8,7 +8,6 @@ let raining = false;
 let rainTimer = 0;
 let rainChance = 0.1;
 let rainDuration = 10.0;
-let barracksThreshold = 20;
 let stone = 500;
 let farmEfficiency = 1.0;
 

@@ -10,8 +10,8 @@ class Unit {
             x: 0,
             y: 0
         };
-        this.acceleration = settings.acceleration || 100;
-        this.friction = settings.friction || 0.1;
+        this.acceleration = settings.acceleration || 200;
+        this.friction = settings.friction || 0.5;
         this.radius = settings.radius || 25;
         this.attackRadius = settings.attackRadius || 25;
 
@@ -123,6 +123,9 @@ class Unit {
 
     destroy() {
         removeEntity(this);
+        if(this instanceof Unit && !this.isEnemy) {
+            friendlySoldierCount -= 1;
+        }
     }
     
     attack() {
@@ -134,8 +137,44 @@ class Unit {
 	updateTarget() {
 		if (this.currentTarget != null && this.currentTarget.currentHealth < 0) {
             this.currentTarget.destroy();
-            this.targets.shift();
+            if (this.currentTarget === this.targets[0]) {
+                this.targets.shift();
+            }
             this.currentTarget = this.targets[0];
+        }
+        if(this.isEnemy) {
+            for (let entity of entities) {
+                if (entity instanceof Unit && !entity.isEnemy) {
+                    this.currentTarget = entity;
+                    return;
+                }
+            }
+            if(this.currentTarget == null) {
+                console.log("Enemy no targets");
+                //debugger;
+                for (let entity of entities) {
+                    if (entity instanceof Unit && !entity.isEnemy) {
+                        this.targets.push(entity);
+                    }
+                }
+                for (let entity of entities) {
+                    if (entity instanceof BuildingNode) {
+                        this.targets.push(entity);
+                    }
+                }
+                this.currentTarget = this.targets[0];
+            }
+        } else {
+            if(this.currentTarget == null) {
+                console.log("Friendly no targets");
+                //debugger;
+                for (let entity of entities) {
+                    if (entity instanceof Unit && entity.isEnemy) {
+                        this.targets.push(entity);
+                    }
+                }
+                this.currentTarget = this.targets[0];
+            }
         }
 	}
 }
