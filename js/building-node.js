@@ -55,7 +55,7 @@ class BuildingNode extends AquaductNode {
             this.average += item;
         }
         this.average /= this.pastWaterValues.length;
-        this.operate(this.average * delta * farmEfficiency, delta);
+        this.operate(this.average * delta, delta);
         this.water = 0;
         if (this.currentHealth < 0) {
             this.destroy();
