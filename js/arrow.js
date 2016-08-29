@@ -16,13 +16,13 @@ class Arrow {
 		this.target = settings.target;
 		
 		this.lifeTime = dist(this.pos.x, this.pos.y, this.target.pos.x, this.target.pos.y) / ARROW_SPEED;
-		//this.angle = atan2(this.pos.x - this.pos.y, this.target.pos.x - this.target.pos.y);
+		this.angle = atan2(this.target.pos.y - this.pos.y, this.target.pos.x - this.pos.x);
     }
 	    
 	draw() {
         push();
-		//rotate(this.angle);
         translate(this.pos.x, this.pos.y);
+		rotate(this.angle);
         image(this.image, -this.image.width / 2, -this.image.height / 2);
         pop();
     }
@@ -35,7 +35,7 @@ class Arrow {
 		
 		this.lifeTime -= delta;
 		
-		if(this.lifeTime < 0) {
+		if(this.lifeTime < 0 || dist(this.pos.x, this.pos.y, this.target.pos.x, this.target.pos.y) < 16) {
 			removeEntity(this);
 			this.target.currentHealth -= ARROW_DAMAGE;
 		} else if (this.target.currentHealth < 0) {

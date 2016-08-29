@@ -36,7 +36,7 @@ class ReservoirNode extends BuildingNode {
 
  update(delta) {
         if (raining) {
-            this.water += delta * this.regenRate;
+            this.water += 5 * delta * this.regenRate;
         }
         if (this.water < 0) {
             this.water = 0;
