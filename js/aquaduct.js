@@ -37,11 +37,31 @@ class Aquaduct {
     }
 
     draw() {
+        let angle = Math.atan2(this.endNode.pos.y - this.startNode.pos.y,
+                               this.endNode.pos.x - this.startNode.pos.x);
         push();
-        stroke('white');
-        strokeWeight(5);
+        translate(this.startNode.pos.x, this.startNode.pos.y);
+        rotate(angle);
+        scale(this.length / aquaductTopImage.width, 1.0);
+        translate(0, -aquaductTopImage.height / 2);
+        colorMode(HSB);
+        fill(240, 50 * (this.startNode.water / this.startNode.maxWater +
+                         this.endNode.water / this.endNode.maxWater), 65);
+        rect(0, 0, aquaductTopImage.width, aquaductTopImage.height);
+        image(aquaductTopImage, 0, 0);
+        pop();
 
-        line(this.startNode.pos.x, this.startNode.pos.y, this.endNode.pos.x, this.endNode.pos.y);
+        let numArches = round(this.length / aquaductSideImage.width);
+        let sign = angle > -PI / 2 && angle < +PI / 2 ? +1 : -1;
+        push();
+        translate(
+            this.startNode.pos.x - 0.5 * sign * aquaductTopImage.height * Math.sin(angle),
+            this.startNode.pos.y + 0.5 * sign * aquaductTopImage.height * Math.cos(angle));
+        shearY(angle);
+        scale(this.length * Math.cos(angle) / (numArches * aquaductSideImage.width), 1.0);
+        for (let i = 0; i < numArches; ++i) {
+            image(aquaductSideImage, i * aquaductSideImage.width, 0);
+        }
         pop();
     }
 

@@ -1,5 +1,7 @@
 console.log('running');
 
+let aquaductTopImage = null;
+let aquaductSideImage = null;
 let backgroundImage = null;
 let raining = false;
 let rainTimer = 0;
@@ -22,6 +24,8 @@ function setup() {
     background(0);
 
     backgroundImage = loadImage("./res/grass.png");
+    aquaductTopImage = loadImage("./res/aquaduct_top.png");
+    aquaductSideImage = loadImage("./res/aquaduct_side.png");
 
     let reservoir = new ReservoirNode({x: width/2, y: height/2});
     let temple = new Temple({x: 3/4 * width, y: height/2, radius: 32, health: 100, image: loadImage("./res/building.png")});
