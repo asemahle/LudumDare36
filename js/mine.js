@@ -8,7 +8,7 @@ class Mine extends BuildingNode {
     }
     
     operate(water, delta) {
-        this.stone += water;
+        this.stone += water * 10;
         let leftover = floor(this.stone);
         stone += leftover;
         this.stone -= leftover;
