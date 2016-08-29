@@ -63,13 +63,12 @@ class AquaductNode {
 
     draw() {
         push();
-        stroke('white');
-        fill(color(0, 0, 255, 255 * this.water));
+        fill(color(0, 0, 0, 0));
         if (this.hovering) {
             stroke('#69f0ff');
             strokeWeight(4);
+            ellipse(this.pos.x, this.pos.y, this.radius*2, this.radius*2);
         }
-        ellipse(this.pos.x, this.pos.y, this.radius*2, this.radius*2);
         pop();
     }
     
