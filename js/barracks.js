@@ -42,6 +42,7 @@ class Barracks extends BuildingNode {
             damage: 3,
             image: friendlySoldierImage,
             attackImage: friendlySoldierAttackImage,
+            deathImage: friendlySoldierDeathImage,
             numFrames: 2,
             isEnemy: false,
             numAttackFrames: 2

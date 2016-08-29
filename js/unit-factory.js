@@ -79,6 +79,7 @@ class UnitFactory {
             damage: 3,
             image: enemySoldierImage,
             attackImage: enemySoldierAttackImage,
+            deathImage: enemySoldierDeathImage,
             numFrames: 2,
             isEnemy: true,
             numAttackFrames: 4
@@ -96,6 +97,7 @@ class UnitFactory {
             maxSpeed: 30,
             image: enemyCatapultImage,
             attackImage: enemyCatapultAttackImage,
+            deathImage: enemyCatapultDeathImage,
             numFrames: 1,
             isEnemy: true,
             numAttackFrames: 2,
@@ -125,6 +127,7 @@ class UnitFactory {
             maxSpeed: 100,
             image: enemyCavalryImage,
             attackImage: enemyCavalryAttackImage,
+            deathImage: enemyCavalryDeathImage,
             numFrames: 2,
             isEnemy: true,
             numAttackFrames: 2
