@@ -91,7 +91,7 @@ class Unit {
                 this.currentAttackTime -= delta;
             }
         }
-        if (this.currentHealth < 0) {
+        if (this.currentHealth <= 0) {
             this.destroy();
         }
     }

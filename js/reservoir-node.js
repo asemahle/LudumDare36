@@ -31,7 +31,7 @@ class ReservoirNode extends BuildingNode {
         if (this.water > this.maxWater) {
             this.water = this.maxWater;
         }
-        console.log("water " + this.water);
+        //console.log("water " + this.water);
     }
 }
 

@@ -24,7 +24,7 @@ class BuildingNode extends AquaductNode {
         var maxWater = this.aquaducts.length != 0 ? this.aquaducts[0].flowRate / this.aquaducts[0].length : 0;
         var waterBarX = this.average / maxWater * 2 * 32;
         rect(-32, 0, healthBarX, 4);
-        fill("blue");
+        fill("lightblue");
         rect(-32, 4, waterBarX, 4);
         pop();
     }

@@ -1,4 +1,4 @@
-const ARROW_SPEED = 100; // pixels per second
+const ARROW_SPEED = 300; // pixels per second
 const ARROW_DAMAGE = 5; 
 
 class Arrow {	
@@ -12,11 +12,11 @@ class Arrow {
             y: settings.y || 0
         };
 				
-        this.image = loadImage("./res/arrow.png");
+        this.image = loadImage("./res/tower_shot.png");
 		this.target = settings.target;
 		
-		this.lifeTime = dist(this.x, this.y, target.x, target.y) / ARROW_SPEED;
-		this.angle = Math.atan2(this.x, this.y, target.x, target.y);
+		this.lifeTime = dist(this.pos.x, this.pos.y, this.target.pos.x, this.target.pos.y) / ARROW_SPEED;
+		//this.angle = atan2(this.pos.x - this.pos.y, this.target.pos.x - this.target.pos.y);
     }
 	    
 	draw() {
@@ -28,16 +28,19 @@ class Arrow {
     }
 	
 	update(delta) {
-		this.angle = Math.atan2(target.x - this.x, target.y - this.y);
+		this.angle = atan2(this.target.pos.y - this.pos.y, this.target.pos.x - this.pos.x);
 		
-		this.x += ARROW_SPEED * Math.cos(this.angle);
-		this.y += ARROW_SPEED * Math.sin(this.angle);
+		this.pos.x += ARROW_SPEED * cos(this.angle) * delta;
+		this.pos.y += ARROW_SPEED * sin(this.angle) * delta;
 		
 		this.lifeTime -= delta;
 		
 		if(this.lifeTime < 0) {
 			removeEntity(this);
-			this.target.health -= ARROW_DAMAGE;
+			this.target.currentHealth -= ARROW_DAMAGE;
+		} else if (this.target.currentHealth < 0) {
+			removeEntity(this);			
 		}
+				
 	}
 }
