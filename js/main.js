@@ -15,12 +15,16 @@ let endGameTimer = 0;
 let waterProjectileImage = null;
 let friendlySoldierImage = null;
 let friendlySoldierAttackImage = null;
+let friendlySoldierDeathImage = null;
 let enemySoldierImage = null;
 let enemySoldierAttackImage = null;
+let enemySoldierDeathImage = null;
 let enemyCavalryImage = null;
 let enemyCavalryAttackImage = null;
+let enemyCavalryDeathImage = null;
 let enemyCatapultImage = null;
 let enemyCatapultAttackImage = null;
+let enemyCatapultDeathImage = null;
 let aquaductTopImage = null;
 let aquaductSideImage = null;
 let catapultShotImage = null;
@@ -55,12 +59,16 @@ function setup() {
 
     friendlySoldierImage = loadImage("./res/soldier.png");
     friendlySoldierAttackImage = loadImage("./res/friendly-attack-animation.png");
+    friendlySoldierDeathImage = loadImage("./res/soldier_dead.png");
     enemySoldierImage = loadImage("./res/enemy_soldier.png");
     enemySoldierAttackImage = loadImage("./res/attack-animation.png");
+    enemySoldierDeathImage = loadImage("./res/enemy_soldier_dead.png");
     enemyCavalryImage = loadImage("./res/cavalry.png");
     enemyCavalryAttackImage = loadImage("./res/cavalry_attack.png");
+    enemyCavalryDeathImage = loadImage("./res/cavalry_dead.png");
     enemyCatapultImage = loadImage("./res/catapult.png");
     enemyCatapultAttackImage = loadImage("./res/catapult_attack.png");
+    enemyCatapultDeathImage = loadImage("./res/catapult_dead.png");
     backgroundImage = loadImage("./res/grass.png");
     aquaductTopImage = loadImage("./res/aquaduct_top.png");
     aquaductSideImage = loadImage("./res/aquaduct_side.png");
@@ -75,7 +83,7 @@ function setup() {
     oldMillis = millis();
 
     $('canvas').on('click contextmenu', (e) => {
-        switch (event.which) {
+        switch (e.which) {
             case 1:
                 leftMouseClicked(e);
                 break;
@@ -321,6 +329,7 @@ function rightMouseClicked(e) {
     for (let entity of entities) {
         if (entity instanceof AquaductNode && entity.hovering) {
             for (let aquaduct of entity.aquaducts.slice()) {
+                state.placingAquaduct = false;
                 aquaduct.destroy();
                 stone += 30;
             }

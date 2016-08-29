@@ -16,7 +16,8 @@ class UnitFactory {
         this.catapultSpawnTimer -= delta;
 
         let garrisonSize = chance.normal({mean: this.averageGarrisonSize, dev: this.averageGarrisonSize * 0.2});
-        let angle = Math.random() * TWO_PI;
+        let angle = (Math.random() - 0.5) * PI / 4;
+        angle += PI / 2 * floor(Math.random() * 4);
         let v = p5.Vector.fromAngle(angle);
         v.mult(sqrt(2 * sq(width / 2)) + 10);
         v.x += width / 2;
@@ -79,6 +80,7 @@ class UnitFactory {
             damage: 3,
             image: enemySoldierImage,
             attackImage: enemySoldierAttackImage,
+            deathImage: enemySoldierDeathImage,
             numFrames: 2,
             isEnemy: true,
             numAttackFrames: 4
@@ -96,6 +98,7 @@ class UnitFactory {
             maxSpeed: 30,
             image: enemyCatapultImage,
             attackImage: enemyCatapultAttackImage,
+            deathImage: enemyCatapultDeathImage,
             numFrames: 1,
             isEnemy: true,
             numAttackFrames: 2,
@@ -125,6 +128,7 @@ class UnitFactory {
             maxSpeed: 100,
             image: enemyCavalryImage,
             attackImage: enemyCavalryAttackImage,
+            deathImage: enemyCavalryDeathImage,
             numFrames: 2,
             isEnemy: true,
             numAttackFrames: 2

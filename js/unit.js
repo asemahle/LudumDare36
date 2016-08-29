@@ -33,6 +33,7 @@ class Unit {
         this.animationSpeed = settings.animationSpeed || 10;
         this.currentFrame = 0;
         this.currentAttackFrame = 0;
+        this.deathImage = settings.deathImage || createImage(64, 64);
 		
 		this.isEnemy = settings.isEnemy || false;
 		this.isAttacking = false;
@@ -125,6 +126,7 @@ class Unit {
 
     destroy() {
         removeEntity(this);
+        addEntity(new Corpse({x: this.pos.x, y: this.pos.y, image: this.deathImage}));
         if(this instanceof Unit && !this.isEnemy) {
             friendlySoldierCount -= 1;
         }
