@@ -75,7 +75,7 @@ function setup() {
     oldMillis = millis();
 
     $('canvas').on('click contextmenu', (e) => {
-        switch (event.which) {
+        switch (e.which) {
             case 1:
                 leftMouseClicked(e);
                 break;
