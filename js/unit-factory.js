@@ -93,7 +93,8 @@ class UnitFactory {
         let unit = new Unit({
             x: x,
             y: y,
-            damage: 10,
+            damage: 15,
+            health: 30,
             targets: targets,
             maxSpeed: 30,
             image: enemyCatapultImage,
@@ -124,6 +125,7 @@ class UnitFactory {
             x: x,
             y: y,
             damage: 5,
+            health: 15,
             targets: [target],
             maxSpeed: 100,
             image: enemyCavalryImage,
