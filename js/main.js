@@ -193,12 +193,17 @@ function draw() {
 }
 
 function drawHighscoreScreen() {
-    background(255);
+    background(222);
+
+    textStyle(BOLD);
+    text("-- SCORE BOARD --", 300, 80);
+    textStyle(NORMAL);
+
     let highscoresShown = 0;
     let userHigh = false;
 
-    namePos = {x: 100, y: 100};
-    scorePos = {x: 300, y: 100};
+    namePos = {x: 100, y: 200};
+    scorePos = {x: 300, y: 200};
 
     let position = 1;
     for (let s of highscores) {
@@ -231,8 +236,8 @@ function drawHighscoreScreen() {
     }
 
     scoresToShow = 0;
-    namePos = {x: 500, y: 100};
-    scorePos = {x: 700, y: 100};
+    namePos = {x: 500, y: 200};
+    scorePos = {x: 700, y: 200};
 
     above = [];
     below = [];
@@ -272,6 +277,10 @@ function drawHighscoreScreen() {
         namePos.y += 30;
         position++;
     }
+
+    textStyle(BOLD);
+    text("Press SPACE to PLAY AGAIN", 220, 650);
+    textStyle(NORMAL);
 }
 
 function drawMenu() {
@@ -287,7 +296,7 @@ function drawGameOver() {
     text("Score was: " + floor(score), 50, 50);
 
     textSize(24);
-    text("Name: " + username, 300, 400);
+    text("Name: " + username, 300, 385);
 }
 
 function drawGame() {
