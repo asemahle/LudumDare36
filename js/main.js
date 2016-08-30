@@ -192,24 +192,26 @@ function drawHighscoreScreen() {
     let userHigh = false;
 
     namePos = {x: 100, y: 100};
-    scorePos = {x: 250, y: 100};
+    scorePos = {x: 300, y: 100};
 
+    let position = 1;
     for (let s of highscores) {
         if (s.score > score || userHigh) {
-            text(s.user, namePos.x, namePos.y);
+            text("#" + position + ". " + s.user, namePos.x, namePos.y);
             text(s.score, scorePos.x, scorePos.y);
         } else {
             textStyle(BOLD);
-            text(username, namePos.x, namePos.y);
+            text("#" + position + ". " + username, namePos.x, namePos.y);
             text(floor(score), scorePos.x, scorePos.y);
             textStyle(NORMAL);
             scorePos.y += 30;
             namePos.y += 30;
             highscoresShown ++;
+            position ++;
 
             if (highscoresShown > 9) break;
 
-            text(s.user, namePos.x, namePos.y);
+            text("#" + position + ". " + s.user, namePos.x, namePos.y);
             text(s.score, scorePos.x, scorePos.y);
 
             userHigh = true;
@@ -218,20 +220,23 @@ function drawHighscoreScreen() {
         scorePos.y += 30;
         namePos.y += 30;
         highscoresShown ++;
+        position ++;
         if (highscoresShown > 9) break;
     }
 
     scoresToShow = 0;
     namePos = {x: 500, y: 100};
-    scorePos = {x: 650, y: 100};
+    scorePos = {x: 700, y: 100};
 
     above = [];
     below = [];
+    position = 1;
     for (let s of highscores) {
         if (s.score > score) {
             above.push(s);
             if (above.length > 5) {
                 above.shift();
+                position ++;
             }
         }
 
@@ -241,22 +246,25 @@ function drawHighscoreScreen() {
     }
 
     for (let s of above) {
-        text(s.user, namePos.x, namePos.y);
+        text("#" + position + ". " + s.user, namePos.x, namePos.y);
         text(s.score, scorePos.x, scorePos.y);
         scorePos.y += 30;
         namePos.y += 30;
+        position ++;
     }
     textStyle(BOLD);
-    text(username, namePos.x, namePos.y);
+    text("#" + position + ". " + username, namePos.x, namePos.y);
     text(floor(score), scorePos.x, scorePos.y);
     scorePos.y += 30;
     namePos.y += 30;
     textStyle(NORMAL);
+    position ++;
     for (let s of below) {
-        text(s.user, namePos.x, namePos.y);
+        text("#" + position + ". " + s.user, namePos.x, namePos.y);
         text(s.score, scorePos.x, scorePos.y);
         scorePos.y += 30;
         namePos.y += 30;
+        position++;
     }
 }
 
@@ -273,7 +281,7 @@ function drawGameOver() {
     text("Score was: " + floor(score), 50, 50);
 
     textSize(24);
-    text("Name: " + username, 250, 400);
+    text("Name: " + username, 300, 400);
 }
 
 function drawGame() {
