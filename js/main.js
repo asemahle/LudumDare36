@@ -2,6 +2,7 @@ let MENU_SCREEN = 0;
 let HELP_SCREEN = 1;
 let GAME_SCREEN = 2;
 let GAME_OVER_SCREEN = 3;
+let HIGHSCORE_SCREEN = 4;
 
 let mainMenuImage = null;
 let helpImage = null;
@@ -49,8 +50,29 @@ let state = {
 };
 let selectedAquaduct = null;
 let img = null;
+let username = '';
 
 let oldMillis = 0;
+
+let highscores = [
+    {user: 'LOSER', score: 1},
+    {user: 'JIM', score: 2},
+    {user: 'JIM', score: 3},
+    {user: 'JIM', score: 4},
+    {user: 'JIM', score: 5},
+    {user: 'JIM', score: 6},
+    {user: 'JIM', score: 7},
+    {user: 'JIM', score: 8},
+    {user: 'JIM', score: 9},
+    {user: 'JIM', score: 100},
+    {user: 'JIM', score: 101},
+    {user: 'JIM', score: 102},
+    {user: 'JIM', score: 104},
+    {user: 'JIM', score: 103},
+    {user: 'WINBOY', score: 105},
+    {user: 'JIM', score: 99},
+];
+
 function setup() {
     createCanvas(800, 800);
     background(0);
@@ -98,6 +120,7 @@ function setup() {
 }
 
 function initializeGame() {
+    highscores.sort((x,y) => { if (x.score < y.score) { return 1;} else { return -1;} });
 
     endGame = false;
 
@@ -158,6 +181,82 @@ function draw() {
     }
     else if (currentScreen == GAME_OVER_SCREEN) {
         drawGameOver();
+    } else if (currentScreen == HIGHSCORE_SCREEN) {
+        drawHighscoreScreen();
+    }
+}
+
+function drawHighscoreScreen() {
+    background(255);
+    let highscoresShown = 0;
+    let userHigh = false;
+
+    namePos = {x: 100, y: 100};
+    scorePos = {x: 250, y: 100};
+
+    for (let s of highscores) {
+        if (s.score > score || userHigh) {
+            text(s.user, namePos.x, namePos.y);
+            text(s.score, scorePos.x, scorePos.y);
+        } else {
+            textStyle(BOLD);
+            text(username, namePos.x, namePos.y);
+            text(floor(score), scorePos.x, scorePos.y);
+            textStyle(NORMAL);
+            scorePos.y += 30;
+            namePos.y += 30;
+            highscoresShown ++;
+
+            if (highscoresShown > 9) break;
+
+            text(s.user, namePos.x, namePos.y);
+            text(s.score, scorePos.x, scorePos.y);
+
+            userHigh = true;
+        }
+
+        scorePos.y += 30;
+        namePos.y += 30;
+        highscoresShown ++;
+        if (highscoresShown > 9) break;
+    }
+
+    scoresToShow = 0;
+    namePos = {x: 500, y: 100};
+    scorePos = {x: 650, y: 100};
+
+    above = [];
+    below = [];
+    for (let s of highscores) {
+        if (s.score > score) {
+            above.push(s);
+            if (above.length > 5) {
+                above.shift();
+            }
+        }
+
+        if (s.score <= score && below.length < 4) {
+            below.push(s);
+        }
+    }
+
+    for (let s of above) {
+        text(s.user, namePos.x, namePos.y);
+        text(s.score, scorePos.x, scorePos.y);
+        scorePos.y += 30;
+        namePos.y += 30;
+    }
+    textStyle(BOLD);
+    text(username, namePos.x, namePos.y);
+    text(floor(score), scorePos.x, scorePos.y);
+    scorePos.y += 30;
+    namePos.y += 30;
+    textStyle(NORMAL);
+    for (let s of below) {
+        text(s.user, namePos.x, namePos.y);
+        text(s.score, scorePos.x, scorePos.y);
+        scorePos.y += 30;
+        namePos.y += 30;
     }
 }
 
@@ -172,6 +271,9 @@ function drawHelp() {
 function drawGameOver() {
     image(gameOverImage, 0, 0);
     text("Score was: " + floor(score), 50, 50);
+
+    textSize(24);
+    text("UserName: " + username, 380, 200);
 }
 
 function drawGame() {
@@ -366,9 +468,39 @@ function keyPressed(){
         initializeGame();
         currentScreen = GAME_SCREEN;
     }
-    else if (currentScreen == GAME_OVER_SCREEN && key == ' ') {
+    else if (currentScreen == HIGHSCORE_SCREEN && key == ' ') {
         initializeGame();
         currentScreen = GAME_SCREEN;
+    }
+
+    // GAME OVER STUFF
+    if (key == 'q' || key == 'Q') {
+        currentScreen = GAME_OVER_SCREEN;
+        return;
+    }
+    if (currentScreen != GAME_OVER_SCREEN) {
+        return;
+    }
+
+    if (/[a-zA-Z0-9-_ ]/.test(key)) {
+        if (username.length < 8) {
+            username += key;
+        }
+    }
+}
+
+function keyReleased() {
+    if (currentScreen != GAME_OVER_SCREEN) return;
+    if (keyCode == 13) {
+        // ENTER
+        if (username.length == 0) {
+            username = 'NONAME';
+        }
+        currentScreen = HIGHSCORE_SCREEN;
+    } else if (keyCode == 8) {
+        if (username.length > 0) {
+            username = username.slice(0, username.length - 1);
+        }
     }
 }
 
