@@ -273,7 +273,7 @@ function drawGameOver() {
     text("Score was: " + floor(score), 50, 50);
 
     textSize(24);
-    text("UserName: " + username, 380, 200);
+    text("Name: " + username, 250, 400);
 }
 
 function drawGame() {
@@ -493,7 +493,7 @@ function keyPressed(){
 
 function keyReleased() {
     if (currentScreen != GAME_OVER_SCREEN) return;
-    if (keyCode == 13) {
+    if (keyCode == 13 || keyCode == 32) {
         // ENTER
         postScore();
         if (username.length == 0) {
