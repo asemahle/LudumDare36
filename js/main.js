@@ -193,8 +193,9 @@ function draw() {
 }
 
 function drawHighscoreScreen() {
+    push();
     background(222);
-
+    textSize(24);
     textStyle(BOLD);
     text("-- SCORE BOARD --", 300, 80);
     textStyle(NORMAL);
@@ -204,6 +205,11 @@ function drawHighscoreScreen() {
 
     namePos = {x: 100, y: 200};
     scorePos = {x: 300, y: 200};
+
+    textStyle(ITALIC);
+    text("HIGHSCORES", 150, 140);
+    text("YOUR SCORE", 550, 140);
+    textStyle(NORMAL);
 
     let position = 1;
     for (let s of highscores) {
@@ -278,9 +284,10 @@ function drawHighscoreScreen() {
         position++;
     }
 
+    textSize(24);
     textStyle(BOLD);
     text("Press SPACE to PLAY AGAIN", 220, 650);
-    textStyle(NORMAL);
+    pop()
 }
 
 function drawMenu() {
@@ -292,11 +299,13 @@ function drawHelp() {
 }
 
 function drawGameOver() {
+    push();
     image(gameOverImage, 0, 0);
     text("Score was: " + floor(score), 50, 50);
 
     textSize(24);
     text("Name: " + username, 300, 385);
+    pop();
 }
 
 function drawGame() {
