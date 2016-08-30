@@ -129,7 +129,7 @@ class UnitFactory {
             image: enemyCavalryImage,
             attackImage: enemyCavalryAttackImage,
             deathImage: enemyCavalryDeathImage,
-            numFrames: 2,
+            numFrames: 4,
             isEnemy: true,
             numAttackFrames: 2
         });
