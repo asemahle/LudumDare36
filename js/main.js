@@ -74,11 +74,14 @@ let highscores = [
     {user: 'JIM', score: 99},
 ];
 
+function preload() {
+    backgroundMusic = loadSound("./res/ld36.ogg");
+}
+
 function setup() {
     createCanvas(800, 800);
     background(0);
 
-    backgroundMusic = loadSound("./res/ld36.ogg");
     backgroundMusic.loop();
     waterProjectileImage = loadImage("./res/water_projectile.png");
 
