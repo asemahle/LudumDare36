@@ -16,7 +16,9 @@ class ReservoirNode extends BuildingNode {
     draw() {
         push();
         translate(this.pos.x, this.pos.y);
-        let img = this.images[floor(2.99 * this.water / this.maxWater)];
+        let index = floor(2.99 * this.water / this.maxWater);
+        index = Math.min(Math.max(index, 0), 2);
+        let img = this.images[index];
         image(img, -img.width / 2, -img.height / 2);
         this.drawHealthBars();
         this.drawWaterBars();
