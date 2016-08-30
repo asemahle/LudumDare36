@@ -493,7 +493,7 @@ function keyPressed(){
 
 function keyReleased() {
     if (currentScreen != GAME_OVER_SCREEN) return;
-    if (keyCode == 13 || keyCode == 32) {
+    if (keyCode == 13) {
         // ENTER
         postScore();
         if (username.length == 0) {
