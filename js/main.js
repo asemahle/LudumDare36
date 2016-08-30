@@ -336,6 +336,7 @@ function drawGame() {
         endGameTimer -= delta;
         if (endGameTimer < 0.0) {
             finishGame();
+            getScore();
             currentScreen = GAME_OVER_SCREEN;
         }
     }
@@ -476,6 +477,7 @@ function keyPressed(){
     // GAME OVER STUFF
     if (key == 'q' || key == 'Q') {
         currentScreen = GAME_OVER_SCREEN;
+        getScore();
         return;
     }
     if (currentScreen != GAME_OVER_SCREEN) {
@@ -493,6 +495,7 @@ function keyReleased() {
     if (currentScreen != GAME_OVER_SCREEN) return;
     if (keyCode == 13) {
         // ENTER
+        postScore();
         if (username.length == 0) {
             username = 'NONAME';
         }
@@ -546,4 +549,44 @@ function shuffle(a) {
     }
 
     return a;
+}
+
+function getScore() {
+    var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://aqueduct-tycoon.firebaseio.com/.json?auth=zz9yZ5dPm9f1y4oHud1DBhIFDi4P0JFkSSHgnoic",
+        "method": "GET",
+        "headers": {
+            "cache-control": "no-cache"
+        }
+    };
+
+    $.ajax(settings).done((response) => {
+        highscores = [];
+        for(let o in response) {
+            if(response[o].name != null && response[o].score != null && $.isNumeric(response[o].score)) {
+                highscores.push({
+                    user: response[o].name,
+                    score: response[o].score
+                });
+            }
+        }
+        highscores.sort((x,y) => { if (x.score < y.score) { return 1;} else { return -1;} });
+    });
+}
+
+function postScore() {
+    var settings = {
+        async: true,
+        crossDomain: true,
+        url: "https://aqueduct-tycoon.firebaseio.com/.json?auth=zz9yZ5dPm9f1y4oHud1DBhIFDi4P0JFkSSHgnoic",
+        method: "POST",
+        headers: {
+            "content-type": "application/json"
+        },
+        processData: false,
+        data: JSON.stringify({"name": username, "score": floor(score)})
+    };
+    $.ajax(settings).done(function (response) { });
 }
