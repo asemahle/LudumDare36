@@ -13,6 +13,7 @@ let currentScreen = MENU_SCREEN;
 let endGame = false;
 let endGameTimer = 0;
 
+let backgroundMusic = null;
 let waterProjectileImage = null;
 let friendlySoldierImage = null;
 let friendlySoldierAttackImage = null;
@@ -77,6 +78,8 @@ function setup() {
     createCanvas(800, 800);
     background(0);
 
+    backgroundMusic = loadSound("./res/ld36.ogg");
+    backgroundMusic.loop();
     waterProjectileImage = loadImage("./res/water_projectile.png");
 
     friendlySoldierImage = loadImage("./res/soldier.png");
